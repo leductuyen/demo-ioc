@@ -13,9 +13,13 @@ export default {
             type: Array,
             required: true,
             default: () => []
+        },
+        xaxis_categories: {
+            type: Array,
+            required: true,
+            default: () => []
         }
     },
-
     mounted() {
         this.renderChart()
     },
@@ -27,26 +31,30 @@ export default {
     },
 
     methods: {
-        calculateLabels(data) {
-            const labels = this.list_label.slice(0, data.length)
-            return labels
-        },
         renderChart() {
             const data = this.data_PieChart
             const totalSchool = data.reduce((a, b) => a + b, 0)
-
+            const labels =
+                this.xaxis_categories.length > 0 ? this.xaxis_categories : []
             const options = {
                 series: data,
                 chart: {
-                    type: 'donut'
+                    type: 'donut',
+                    height: 300
                 },
-                labels: this.calculateLabels(data),
+                labels: labels,
                 dataLabels: {
+                    enabled: true,
                     formatter(val, opts) {
                         const name = opts.w.globals.labels[opts.seriesIndex]
-                        return [name, val.toFixed(2) + '%']
+                        if (labels.includes(name)) {
+                            return [name, val.toFixed(2) + '%']
+                        } else {
+                            return ''
+                        }
                     }
                 },
+
                 plotOptions: {
                     pie: {
                         expandOnClick: true,
@@ -63,7 +71,7 @@ export default {
                         }
                     }
                 },
-                colors: this.colors
+                colors: this.getColors()
             }
 
             const chartContainer = this.$refs.chartContainer
@@ -77,28 +85,16 @@ export default {
                 this.chart = new ApexCharts(chartContainer, options)
                 this.chart.render()
             }
+        },
+        getColors() {
+            const categoryCount = this.xaxis_categories.length
+            return this.colors.slice(0, categoryCount)
         }
     },
 
     data() {
         return {
-            list_label: [
-                'Mầm non',
-                'Tiểu học',
-                'THCS',
-                'THPT',
-                'Liên cấp',
-                'GDTX',
-                'Liên cấp 2+3',
-                'Khác'
-            ],
             colors: [
-                // '#969AFB',
-                // '#FFA200',
-                // '#60BFFF',
-                // '#90ED7D',
-                // '#FB4444',
-                // '#014839',
                 '#2E93fA',
                 '#66DA26',
                 '#546E7A',

@@ -44,7 +44,7 @@
                         "
                     />
                 </div>
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-6">
                     <ESelect
                         :reset="resetESelectSchool"
                         @reset-completed="handleResetCompleted"
@@ -70,6 +70,7 @@
                             label="Thống kê"
                             size="small"
                             type="success"
+                            @click="handleThongKe"
                         />
                     </div>
                 </div>
@@ -86,7 +87,13 @@
                                 TRƯỜNG
                             </div>
                         </div>
-                        <div class="card-body"></div>
+                        <div class="card-body">
+                            <DashedLineChart
+                                :dulieu="
+                                    mockData_BieuDoDashedLineChart.loaiHinhTruong
+                                "
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6 mb-4">
@@ -98,7 +105,9 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <DashedLineChart />
+                            <DashedLineChart
+                                :dulieu="mockData_BieuDoDashedLineChart.khuVuc"
+                            />
                         </div>
                     </div>
                 </div>
@@ -112,7 +121,10 @@ import ESelect from '@/components/ESelect.vue'
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
 import { mapState } from 'vuex'
-import { ESelectGradeLevel_MockData } from '@/mock_data'
+import {
+    ESelectGradeLevel_MockData,
+    mockData_BieuDoDashedLineChart
+} from '@/mock_data'
 import DashedLineChart from '@/components/DashedLineChart.vue'
 import CustomTitle from '@/components/CustomTitle.vue'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -121,100 +133,16 @@ export default {
     components: { CustomButton, ESelect, DashedLineChart, CustomTitle },
     data() {
         return {
-            data: [30, 40, 25, 50, 49, 21, 70, 51],
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-            duLieu: {
-                loaiHinhTruong: {
-                    series: [
-                        {
-                            name: 'Tổng số học sinh',
-                            data: [
-                                230000, 233000, 233600, 324000, 342500, 362000,
-                                392120
-                            ]
-                        },
-                        {
-                            name: 'Công lập',
-                            data: [
-                                79000, 89300, 99901, 110352, 120000, 135062,
-                                151695
-                            ]
-                        },
-                        {
-                            name: 'Dân lập',
-                            data: [
-                                85000, 65300, 70496, 87620, 98963, 108990, 119120
-                            ]
-                        },
-                        {
-                            name: 'Tư thục',
-                            data: [
-                                36000, 48400, 58543, 68213, 66880, 75185, 96305
-                            ]
-                        }
-                    ],
-                    categories: [
-                        '2018-2019',
-                        '2019-2020',
-                        '2020-2021',
-                        '2021-2022',
-                        '2022-2023',
-                        '2023-2024',
-                        '2024-2025'
-                    ]
-                },
-                khuVuc: {
-                    series: [
-                        {
-                            name: 'Tổng số học sinh',
-                            data: [
-                                230000, 233000, 233600, 324000, 342500, 362000,
-                                392120
-                            ]
-                        },
-                        {
-                            name: 'Biên giới - hải đảo',
-                            data: [
-                                36000, 48400, 58543, 68213, 66880, 75185, 96305
-                            ]
-                        },
-                        {
-                            name: 'Đô thị',
-                            data: [
-                                85000, 65300, 70496, 87620, 98963, 108990, 119120
-                            ]
-                        },
-                        {
-                            name: 'Đồng bằng',
-                            data: [
-                                79000, 89300, 99901, 110352, 120000, 135062,
-                                151695
-                            ]
-                        },
-                        {
-                            name: 'Vùng núi - Vùng sâu',
-                            data: [6000, 8400, 8543, 6213, 6880, 7185, 5305]
-                        }
-                    ],
-                    categories: [
-                        '2018-2019',
-                        '2019-2020',
-                        '2020-2021',
-                        '2021-2022',
-                        '2022-2023',
-                        '2023-2024',
-                        '2024-2025'
-                    ]
-                }
-            },
+            mockData_BieuDoDashedLineChart: mockData_BieuDoDashedLineChart,
 
             resetESelectSchool: false,
 
-            requestParams_Select: {
-                start: 0,
-                limit: 9999,
-                maTinhThanh: null,
-                check: true
+            requesData_BieuDoPhoDiem: {
+                capHocs: [],
+                maDonVis: [],
+                maSo: null,
+                maTruongs: [],
+                namHoc: null
             },
             getDataESelect: {
                 ESelectUnitEducation: [], //chondonvi
@@ -327,6 +255,49 @@ export default {
                     break
             }
         },
+        async handleThongKe() {
+            try {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading ...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                })
+                const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueUnitEducation,
+                    'selectedValueUnitEducation'
+                )
+                const capHocs_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueGradeLevel,
+                    'selectedValueGradeLevel'
+                )
+                const maTruongs_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueSchool,
+                    'selectedValueSchool'
+                )
+                const namHoc_Update = this.selectedValue.selectedValueSchoolYear
+                // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
+
+                const requesData_BieuDoPhoDiem_Update = {
+                    ...this.requesData_BieuDoPhoDiem,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+                this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
+
+                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
+
+                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+                await this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+                setTimeout(() => {
+                    loading.close()
+                }, 2000)
+            } catch (error) {
+                console.log(error)
+            }
+        },
         customValueSelectedThongKeTangGiam(options, valueType) {
             switch (valueType) {
                 case 'selectedValueUnitEducation':
@@ -355,6 +326,8 @@ export default {
     },
     mounted() {
         this.getDataESelectSchool()
+        this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+        this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
     }
 }
 </script>

@@ -44,7 +44,7 @@
                         "
                     />
                 </div>
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-6">
                     <ESelect
                         :reset="resetESelectSchool"
                         @reset-completed="handleResetCompleted"
@@ -70,6 +70,7 @@
                             label="Thống kê"
                             size="small"
                             type="success"
+                            @click="handleThongKe"
                         />
                     </div>
                 </div>
@@ -82,14 +83,14 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
-                                DỰ BÁO SỐ LƯỢNG CÁN BỘ GIÁO VIÊN THEO LOẠI HÌNH
+                                DỰ BÁO SỐ LƯỢNG HỌC SINH GIỎI THEO LOẠI HÌNH
                                 TRƯỜNG
                             </div>
                         </div>
                         <div class="card-body">
-                            <LineChart
-                                :data_LineChart="
-                                    getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem
+                            <DashedLineChart
+                                :dulieu="
+                                    mockData_BieuDoDashedLineChart.loaiHinhTruong
                                 "
                             />
                         </div>
@@ -98,16 +99,11 @@
                 <div class="col-md-6 mb-4">
                     <div class="card">
                         <div class="card-header">
-                            <div class="title">
-                                DỰ BÁO SỐ LƯỢNG CÁN BỘ GIÁO VIÊN THEO TRÌNH ĐỘ
-                                CHÍNH
-                            </div>
+                            <div class="title">DỰ BÁO KẾT QUẢ HỌC TẬP</div>
                         </div>
                         <div class="card-body">
-                            <LineChart
-                                :data_LineChart="
-                                    getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem
-                                "
+                            <DashedLineChart
+                                :dulieu="mockData_BieuDoDashedLineChart.khuVuc"
                             />
                         </div>
                     </div>
@@ -122,27 +118,28 @@ import ESelect from '@/components/ESelect.vue'
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
 import { mapState } from 'vuex'
-import { ESelectGradeLevel_MockData } from '@/mock_data'
-import LineChart from '@/components/LineChart.vue'
+import {
+    ESelectGradeLevel_MockData,
+    mockData_BieuDoDashedLineChart
+} from '@/mock_data'
+import DashedLineChart from '@/components/DashedLineChart.vue'
 import CustomTitle from '@/components/CustomTitle.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 export default {
-    name: 'KetQuaHocTapCuaHocSinh',
-    components: { CustomButton, ESelect, LineChart, CustomTitle },
+    name: 'DuBaoSoLuongGiaoVien',
+    components: { CustomButton, ESelect, DashedLineChart, CustomTitle },
     data() {
         return {
+            mockData_BieuDoDashedLineChart: mockData_BieuDoDashedLineChart,
+
             resetESelectSchool: false,
-            xaxisCategories: {
-                danhGiaHocSinh: ['Giỏi', 'Khá', 'T.B', 'Yếu', 'Kém', 'Khác'],
-                gioiTinh: ['Nam', 'Nữ'],
-                loaiHinhDaoTao: ['Công lập', 'Tư Thục', 'Dân lập'],
-                khuVuc: ['B.Giới-H.Đảo', 'Đô thị', 'Đồng bằng', 'M.Núi-V.Sâu']
-            },
-            requestParams_Select: {
-                start: 0,
-                limit: 9999,
-                maTinhThanh: null,
-                check: true
+
+            requesData_BieuDoPhoDiem: {
+                capHocs: [],
+                maDonVis: [],
+                maSo: null,
+                maTruongs: [],
+                namHoc: null
             },
             getDataESelect: {
                 ESelectUnitEducation: [], //chondonvi
@@ -255,6 +252,49 @@ export default {
                     break
             }
         },
+        async handleThongKe() {
+            try {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading ...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                })
+                const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueUnitEducation,
+                    'selectedValueUnitEducation'
+                )
+                const capHocs_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueGradeLevel,
+                    'selectedValueGradeLevel'
+                )
+                const maTruongs_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueSchool,
+                    'selectedValueSchool'
+                )
+                const namHoc_Update = this.selectedValue.selectedValueSchoolYear
+                // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
+
+                const requesData_BieuDoPhoDiem_Update = {
+                    ...this.requesData_BieuDoPhoDiem,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+                this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
+
+                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
+
+                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+                await this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+                setTimeout(() => {
+                    loading.close()
+                }, 2000)
+            } catch (error) {
+                console.log(error)
+            }
+        },
         customValueSelectedThongKeTangGiam(options, valueType) {
             switch (valueType) {
                 case 'selectedValueUnitEducation':
@@ -283,15 +323,12 @@ export default {
     },
     mounted() {
         this.getDataESelectSchool()
+        this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+        this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
     }
 }
 </script>
 <style scoped>
-.title {
-    color: black;
-    font-size: 18px;
-    margin-bottom: 20px;
-}
 .select-dashboard {
     background-color: #fff;
     border-radius: 10px;

@@ -12,14 +12,15 @@ import ApexCharts from 'apexcharts'
 export default {
     mounted() {
         this.renderChart()
+        this.updateChart(this.data_LineChart)
     },
     watch: {
         data_LineChart: {
             handler(newData) {
                 this.updateChart(newData)
             },
-            deep: true,
-        },
+            deep: true
+        }
     },
 
     methods: {
@@ -30,33 +31,33 @@ export default {
                     height: 300,
                     type: 'area',
                     toolbar: {
-                        show: false,
-                    },
+                        show: false
+                    }
                 },
                 dataLabels: {
-                    enabled: false,
+                    enabled: false
                 },
                 xaxis: {
                     categories: [
-                        '<1',
-                        '<2',
-                        '<3',
-                        '<4',
-                        '<5',
-                        '<6',
-                        '<7',
-                        '<8',
-                        '<9',
-                        '<10',
-                    ],
+                        'Tháng 8',
+                        'Tháng 9',
+                        'Tháng 10',
+                        'Tháng 11',
+                        'Tháng 12',
+                        'Tháng 1',
+                        'Tháng 2',
+                        'Tháng 3',
+                        'Tháng 4',
+                        'Tháng 5'
+                    ]
                 },
                 fill: {
-                    opacity: 0,
+                    opacity: 0
                 },
                 legend: {
                     position: 'bottom',
                     offsetX: 0,
-                    offsetY: 0,
+                    offsetY: 0
                 },
                 colors: [
                     '#2E93fA',
@@ -67,8 +68,8 @@ export default {
                     '#F781F3',
                     '#FFFF00',
                     '#19070B',
-                    '#00FF40',
-                ],
+                    '#00FF40'
+                ]
             }
 
             const chartContainer = this.$refs.chartContainer
@@ -78,17 +79,17 @@ export default {
         updateChart(newData) {
             if (newData && newData.length > 0) {
                 this.chart.updateOptions({
-                    series: newData,
+                    series: newData
                 })
             }
-        },
+        }
     },
     props: {
         data_LineChart: {
             type: Array,
-            required: true,
-        },
-    },
+            required: true
+        }
+    }
 }
 </script>
 

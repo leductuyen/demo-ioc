@@ -12,7 +12,7 @@
         </div>
 
         <el-menu
-            :default-active="'/dashboard' || activeMenu"
+            :default-active="activeMenu"
             class="el-menu-vertical-demo"
             background-color="#fff"
             text-color="#131523"
@@ -33,7 +33,9 @@
                         <span
                             style="font-family: 'Source Sans Pro', sans-serif"
                             @click="navigateRouter(item.path)"
-                            >{{ item.name }}
+                            v-loading.fullscreen.lock="fullscreenLoading"
+                        >
+                            {{ item.name }}
                         </span>
                     </template>
                     <template v-for="(child, index) in item.children">
@@ -90,9 +92,8 @@ export default {
             dataLeftBar: [],
             permission: permission_ioc,
             dataMenu: [],
-            selectedItem: null,
-            activeIndex: null,
-            activeMenu: null
+            activeMenu: null,
+            fullscreenLoading: false
         }
     },
     computed: {
@@ -112,14 +113,16 @@ export default {
     methods: {
         navigateRouter(path) {
             if (this.$route.path !== path) {
+                this.fullscreenLoading = true
+                setTimeout(() => {
+                    this.fullscreenLoading = false
+                }, 1000)
                 // Kiểm tra xem đường dẫn có tồn tại trong router hay không
                 const route = this.$router.resolve({ path })
 
                 if (route.resolved.matched.length > 0) {
                     // Chuyển hướng nếu đường dẫn tồn tại trong router và khác với đường dẫn hiện tại
                     this.$router.push(path)
-                    console.log('pa', path)
-                    console.log('ma', route.resolved.matched)
                 } else {
                     // Xử lý khi đường dẫn không tồn tại trong router
                     console.log(`Đường dẫn ${path} không tồn tại`)
