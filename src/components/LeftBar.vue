@@ -12,7 +12,7 @@
         </div>
 
         <el-menu
-            :default-active="activeMenu || '/dashboard'"
+            :default-active="'/dashboard' || activeMenu"
             class="el-menu-vertical-demo"
             background-color="#fff"
             text-color="#131523"
