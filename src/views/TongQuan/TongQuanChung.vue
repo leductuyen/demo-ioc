@@ -121,8 +121,8 @@
             <div class="row">
                 <div class="col-md-4"></div>
                 <div class="col-md-8">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
+                    <div class="row mb-5">
+                        <div class="col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-header">
                                     <div class="title">
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-header">
                                     <div class="title">
@@ -161,8 +161,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                    <div class="row mb-5">
+                        <div class="col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-header">
                                     <div class="title">
@@ -181,15 +181,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-header">
                                     <div class="title">Học sinh-Học lực</div>
                                 </div>
                                 <div class="card-body">
-                                    <DashedLineChart
-                                        :dulieu="
-                                            mockData_BieuDoDashedLineChart.khuVuc
+                                    <StackedColumnChart
+                                        :data_StackedColumnChart="
+                                            getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc
+                                        "
+                                        :xaxis_categories="
+                                            xaxisCategories_TongQuanChung.hocLuc
                                         "
                                     />
                                 </div>
@@ -217,7 +220,6 @@ import {
 } from '@/mock_data/index'
 import ChangeTrackerItemCountTitle from '@/components/ChangeTrackerItemCountTitle.vue'
 import StackedColumnChart from '@/components/StackedColumnChart.vue'
-import DashedLineChart from '@/components/DashedLineChart.vue'
 import CustomTitle from '@/components/CustomTitle.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -230,7 +232,7 @@ export default {
         CustomStatistic,
         ChangeTrackerItemCountTitle,
         StackedColumnChart,
-        DashedLineChart,
+
         CustomTitle
     },
     data() {
@@ -320,6 +322,9 @@ export default {
             },
             getDataBieuDoCanBoGiaoVienNhanVien: {
                 dataBieuDoTrinhDoChinh_CBGVNV: []
+            },
+            getDataBieuDoHocSinh_HocLuc: {
+                dataBieuDohocSinh_HocLuc: []
             }
         }
     },
@@ -447,126 +452,24 @@ export default {
                 'bieudoCot'
             )
         },
-
-        handleESelectChange(source, ...selectedOptions) {
-            switch (source) {
-                case 'ESelectUnitEducation':
-                    this.selectedValue.selectedValueUnitEducation =
-                        selectedOptions
-                    this.resetESelectSchool = true
-                    this.selectedValue.selectedValueSchool = []
-                    this.getDataChonTruonghoc()
-                    break
-                case 'ESelectGradeLevel_MockData':
-                    this.selectedValue.selectedValueGradeLevel = selectedOptions
-                    this.resetESelectSchool = true
-                    this.selectedValue.selectedValueSchool = []
-                    this.getDataChonTruonghoc()
-                    break
-                case 'ESelectSchool':
-                    this.selectedValue.selectedValueSchool = selectedOptions
-                    break
-                case 'ESelectSchoolYear_MockData':
-                    this.selectedValue.selectedValueSchoolYear = selectedOptions
-                    break
+        async getDataBieuDoDanhGiaHocSinh_HocLuc() {
+            this.requestHeaders = {
+                token: this.authToken
             }
-        },
-
-        async handleThongKe() {
-            try {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading ...',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                })
-                const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
-                    this.selectedValue.selectedValueUnitEducation,
-                    'selectedValueUnitEducation'
-                )
-                const capHocs_Update = this.customValueSelectedThongKeTangGiam(
-                    this.selectedValue.selectedValueGradeLevel,
-                    'selectedValueGradeLevel'
-                )
-                const maTruongs_Update = this.customValueSelectedThongKeTangGiam(
-                    this.selectedValue.selectedValueSchool,
-                    'selectedValueSchool'
-                )
-                const namHoc_Update = this.selectedValue.selectedValueSchoolYear
-                // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
-                const requestData_ThongKeTangGiam_Update = {
-                    ...this.requestData_ThongKeTangGiam,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
-                }
-
-                this.requestData_ThongKeTangGiam =
-                    requestData_ThongKeTangGiam_Update
-
-                // xử lý việc khi click thì sẽ lấy lại dữ liệu cho BieuDoTongQuan, BieuDoChatLuongDaoTao, BieuDoLoaiHinhDaoTao
-                const requestData_BieuDoTruongHoc_Update = {
-                    ...this.requestData_BieuDoTruongHoc,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
-                }
-
-                this.requestData_BieuDoTruongHoc =
-                    requestData_BieuDoTruongHoc_Update
-
-                const requestData_BieuDoHocSinh_Update = {
-                    ...this.requestData_BieuDoHocSinh,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
-                }
-                this.requestData_BieuDoHocSinh = requestData_BieuDoHocSinh_Update
-
-                const requestData_BieuDoCanBoGiaoVienNhanVien_Update = {
-                    ...this.requestData_BieuDoCanBoGiaoVienNhanVien,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
-                }
-                this.requestData_BieuDoCanBoGiaoVienNhanVien =
-                    requestData_BieuDoCanBoGiaoVienNhanVien_Update
-
-                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
-                await this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-                await this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-                await this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
-
-                await this.getDataBieuDoChatLuongDaoTao_TruongHoc()
-
-                await this.getDataBieuDoTrangThai_HocSinh()
-
-                await this.getDataBieuDoTrinhDoChinh_CBGVNV()
-
-                loading.close()
-            } catch (error) {
-                console.log(error)
+            const currentYear = new Date().getFullYear()
+            this.requesData_BieuDoPhoDiem = {
+                ...this.requesData_BieuDoPhoDiem,
+                maSo: this.authUser.province,
+                hocKy: 3,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
-        },
-
-        // hàm dùng chung cho ThongKeTangGiam
-        customValueSelectedThongKeTangGiam(options, valueType) {
-            switch (valueType) {
-                case 'selectedValueUnitEducation':
-                case 'selectedValueSchool':
-                    return options.map((option) => option.value)
-                case 'selectedValueGradeLevel':
-                    return options
-                        .map((option) => option.value)
-                        .join('')
-                        .toString()
-                        .split('')
-                        .map(Number)
-            }
+            const response = await sendRequest(
+                Api.bieuDoPhoDiem.bieuDoDanhGiaHocSinh,
+                this.requesData_BieuDoPhoDiem,
+                this.requestHeaders
+            )
+            this.getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc =
+                response.item.listData
         },
 
         async customGetDataBieuDoTruongHoc(apiEndpoint, dataKey, responseKey) {
@@ -641,15 +544,137 @@ export default {
                 this.requestData_BieuDoCanBoGiaoVienNhanVien,
                 this.requestHeaders
             )
-            switch (responseKey) {
-                case 'bieudoTron':
-                    this.getDataBieuDoCanBoGiaoVienNhanVien[dataKey] =
-                        response.item.listValue
+
+            this.getDataBieuDoCanBoGiaoVienNhanVien.dataBieuDoTrinhDoChinh_CBGVNV =
+                response.item.listData
+        },
+        handleESelectChange(source, ...selectedOptions) {
+            switch (source) {
+                case 'ESelectUnitEducation':
+                    this.selectedValue.selectedValueUnitEducation =
+                        selectedOptions
+                    this.resetESelectSchool = true
+                    this.selectedValue.selectedValueSchool = []
+                    this.getDataChonTruonghoc()
                     break
-                case 'bieudoCot':
-                    this.getDataBieuDoCanBoGiaoVienNhanVien[dataKey] =
-                        response.item.listData
+                case 'ESelectGradeLevel_MockData':
+                    this.selectedValue.selectedValueGradeLevel = selectedOptions
+                    this.resetESelectSchool = true
+                    this.selectedValue.selectedValueSchool = []
+                    this.getDataChonTruonghoc()
                     break
+                case 'ESelectSchool':
+                    this.selectedValue.selectedValueSchool = selectedOptions
+                    break
+                case 'ESelectSchoolYear_MockData':
+                    this.selectedValue.selectedValueSchoolYear = selectedOptions
+                    break
+            }
+        },
+
+        async handleThongKe() {
+            try {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading ...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                })
+                const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueUnitEducation,
+                    'selectedValueUnitEducation'
+                )
+                const capHocs_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueGradeLevel,
+                    'selectedValueGradeLevel'
+                )
+                const maTruongs_Update = this.customValueSelectedThongKeTangGiam(
+                    this.selectedValue.selectedValueSchool,
+                    'selectedValueSchool'
+                )
+                const namHoc_Update = this.selectedValue.selectedValueSchoolYear
+                // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
+                const requestData_ThongKeTangGiam_Update = {
+                    ...this.requestData_ThongKeTangGiam,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+
+                this.requestData_ThongKeTangGiam =
+                    requestData_ThongKeTangGiam_Update
+
+                const requestData_BieuDoTruongHoc_Update = {
+                    ...this.requestData_BieuDoTruongHoc,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+
+                this.requestData_BieuDoTruongHoc =
+                    requestData_BieuDoTruongHoc_Update
+
+                const requestData_BieuDoHocSinh_Update = {
+                    ...this.requestData_BieuDoHocSinh,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+                this.requestData_BieuDoHocSinh = requestData_BieuDoHocSinh_Update
+
+                const requesData_BieuDoPhoDiem_Update = {
+                    ...this.requesData_BieuDoPhoDiem,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+                this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
+
+                const requestData_BieuDoCanBoGiaoVienNhanVien_Update = {
+                    ...this.requestData_BieuDoCanBoGiaoVienNhanVien,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+                this.requestData_BieuDoCanBoGiaoVienNhanVien =
+                    requestData_BieuDoCanBoGiaoVienNhanVien_Update
+
+                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
+                await this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
+                await this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
+                await this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
+
+                await this.getDataBieuDoChatLuongDaoTao_TruongHoc()
+
+                await this.getDataBieuDoTrangThai_HocSinh()
+
+                await this.getDataBieuDoTrinhDoChinh_CBGVNV()
+
+                await this.getDataBieuDoDanhGiaHocSinh_HocLuc()
+
+                loading.close()
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        // hàm dùng chung cho ThongKeTangGiam
+        customValueSelectedThongKeTangGiam(options, valueType) {
+            switch (valueType) {
+                case 'selectedValueUnitEducation':
+                case 'selectedValueSchool':
+                    return options.map((option) => option.value)
+                case 'selectedValueGradeLevel':
+                    return options
+                        .map((option) => option.value)
+                        .join('')
+                        .toString()
+                        .split('')
+                        .map(Number)
             }
         }
     },
@@ -679,6 +704,8 @@ export default {
         this.getDataBieuDoTrangThai_HocSinh()
 
         this.getDataBieuDoTrinhDoChinh_CBGVNV()
+
+        this.getDataBieuDoDanhGiaHocSinh_HocLuc()
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear() - 1

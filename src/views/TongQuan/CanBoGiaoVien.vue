@@ -137,6 +137,12 @@
             :dataBieuDoLoaiHopDong_CBGVNV="
                 getDataBieuDoCanBoGiaoVienNhanVien.dataBieuDoLoaiHopDong_CBGVNV
             "
+            :dataBieuDoDoTuoi_CBGVNV="
+                getDataBieuDoPhanLoaiCanBo.dataBieuDoDoTuoi_CBGVNV
+            "
+            :dataBieuDoTrangThai_CBGVNV="
+                getDataBieuDoPhanLoaiCanBo.dataBieuDoTrangThai_CBGVNV
+            "
         />
     </div>
 </template>
@@ -192,7 +198,13 @@ export default {
                 maTruongs: [],
                 namHoc: null
             },
-
+            requesData_BieuDoPhanLoaiCanBo: {
+                capHocs: [],
+                maDonVis: [],
+                maSo: null,
+                maTruongs: [],
+                namHoc: null
+            },
             getDataESelect: {
                 ESelectUnitEducation: [], //chondonvi
                 ESelectGradeLevel_MockData: ESelectGradeLevel_MockData, // chon cap hoc
@@ -217,6 +229,11 @@ export default {
                 dataBieuDoTrinhDoChinh_CBGVNV: [],
                 dataBieuDoGioiTinh_CBGVNV: [],
                 dataBieuDoLoaiHopDong_CBGVNV: []
+            },
+            getDataBieuDoPhanLoaiCanBo: {
+                dataBieuDoDoTuoi_CBGVNV: [],
+
+                dataBieuDoTrangThai_CBGVNV: []
             }
         }
     },
@@ -273,7 +290,34 @@ export default {
             )
             this.dataThongKeTangGiam[dataKey] = response.item
         },
+        async customGetDataPhanLoaiCanBo(apiEndpoint, dataKey, responseKey) {
+            this.requestHeaders = {
+                token: this.authToken
+            }
+            const currentYear = new Date().getFullYear()
+            this.requesData_BieuDoPhanLoaiCanBo = {
+                ...this.requesData_BieuDoPhanLoaiCanBo,
+                maSo: this.authUser.province,
+                namHoc:
+                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+            }
+            const response = await sendRequest(
+                apiEndpoint,
+                this.requesData_BieuDoPhanLoaiCanBo,
+                this.requestHeaders
+            )
 
+            switch (responseKey) {
+                case 'bieudoTron':
+                    this.getDataBieuDoPhanLoaiCanBo[dataKey] =
+                        response.item.listValue
+                    break
+                case 'bieudoCot':
+                    this.getDataBieuDoPhanLoaiCanBo[dataKey] =
+                        response.item.listData
+                    break
+            }
+        },
         async getDataBieuDoTongQuan_CBGVNV() {
             await this.customGetDataCanBoGiaoVienNhanVien(
                 Api.bieuDoCanBoGiaoVienNhanVien.bieuDoTongQuan,
@@ -303,6 +347,21 @@ export default {
             )
         },
 
+        async getDataBieuDoDoTuoi_CBGVNV() {
+            await this.customGetDataPhanLoaiCanBo(
+                Api.bieuDoPhanLoaiCanBo.bieuDoDoTuoi,
+                'dataBieuDoDoTuoi_CBGVNV',
+                'bieudoCot'
+            )
+        },
+
+        async getDataBieuDoTrangThai_CBGVNV() {
+            await this.customGetDataPhanLoaiCanBo(
+                Api.bieuDoPhanLoaiCanBo.bieuDoTrangThai,
+                'dataBieuDoTrangThai_CBGVNV',
+                'bieudoCot'
+            )
+        },
         handleESelectChange(source, ...selectedOptions) {
             switch (source) {
                 case 'ESelectUnitEducation':
@@ -381,6 +440,10 @@ export default {
                 await this.getDataBieuDoTrinhDoChinh_CBGVNV()
                 await this.getDataBieuDoGioiTinh_CBGVNV()
                 await this.getDataBieuDoLoaiHopDong_CBGVNV()
+
+                await this.getDataBieuDoDoTuoi_CBGVNV()
+
+                await this.getDataBieuDoTrangThai_CBGVNV()
 
                 setTimeout(() => {
                     loading.close()
@@ -462,6 +525,10 @@ export default {
         this.getDataBieuDoTrinhDoChinh_CBGVNV()
         this.getDataBieuDoGioiTinh_CBGVNV()
         this.getDataBieuDoLoaiHopDong_CBGVNV()
+
+        this.getDataBieuDoDoTuoi_CBGVNV()
+
+        this.getDataBieuDoTrangThai_CBGVNV()
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()

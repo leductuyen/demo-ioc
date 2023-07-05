@@ -38,7 +38,8 @@ export default {
             const options = {
                 series: data,
                 chart: {
-                    type: 'donut'
+                    type: 'donut',
+                    height: 300
                 },
                 labels: this.calculateLabels(data),
                 dataLabels: {
@@ -63,7 +64,10 @@ export default {
                         }
                     }
                 },
-                colors: this.colors
+                colors: this.colors,
+                legend: {
+                    show: false
+                }
             }
 
             const chartContainer = this.$refs.chartContainer

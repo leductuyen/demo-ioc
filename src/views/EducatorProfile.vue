@@ -34,9 +34,9 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoTrinhDoChinh_CBGVNV
+                                    dataBieuDoTrangThai_CBGVNV
                                 "
-                                :xaxis_categories="xaxisCategories.trinhDoChinh"
+                                :xaxis_categories="xaxisCategories.trangThai"
                             />
                         </div>
                     </div>
@@ -65,10 +65,8 @@
                         </div>
                         <div class="card-body">
                             <StackedColumnChart
-                                :data_StackedColumnChart="
-                                    dataBieuDoTrinhDoChinh_CBGVNV
-                                "
-                                :xaxis_categories="xaxisCategories.trinhDoChinh"
+                                :data_StackedColumnChart="dataBieuDoDoTuoi_CBGVNV"
+                                :xaxis_categories="xaxisCategories.doTuoi"
                             />
                         </div>
                     </div>
@@ -133,7 +131,17 @@ export default {
                     'Trung cấp'
                 ],
                 gioiTinh: ['Nam', 'Nữ'],
-                loaiHopDong: ['HĐKXĐ thời hạn', 'HĐXĐ thời hạn', 'HĐLĐ']
+                loaiHopDong: ['HĐKXĐ thời hạn', 'HĐXĐ thời hạn', 'HĐLĐ'],
+                doTuoi: [
+                    '<20',
+                    '20-29',
+                    '30-39',
+                    '40-49',
+                    '50-54',
+                    '55-59',
+                    '>60'
+                ],
+                trangThai: ['Đang làm việc', 'Chuyển đến', 'Chuyển đi', 'Khác']
             }
         }
     },
@@ -151,6 +159,14 @@ export default {
             required: true
         },
         dataBieuDoLoaiHopDong_CBGVNV: {
+            type: Array,
+            required: true
+        },
+        dataBieuDoDoTuoi_CBGVNV: {
+            type: Array,
+            required: true
+        },
+        dataBieuDoTrangThai_CBGVNV: {
             type: Array,
             required: true
         }

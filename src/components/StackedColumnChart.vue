@@ -39,10 +39,11 @@ export default {
                     name: item.name,
                     data: item.data
                 })),
-                width: this.getWidthChart(this.xaxis_categories),
+
                 chart: {
                     type: 'bar',
                     height: '300',
+                    width: this.getWidthChart(this.xaxis_categories),
                     stacked: true,
                     toolbar: {
                         show: false
@@ -61,6 +62,9 @@ export default {
                                 style: {
                                     fontSize: '13px',
                                     fontWeight: 900
+                                },
+                                formatter: function (val) {
+                                    return val.toLocaleString() // Định dạng số thành chuỗi
                                 }
                             }
                         }
@@ -97,7 +101,7 @@ export default {
                 this.chart.updateSeries(
                     newData.map((item) => ({
                         name: item.name,
-                        data: item.data
+                        data: item.data.map((value) => value.toLocaleString())
                     }))
                 )
                 this.chart.updateOptions({
@@ -124,8 +128,8 @@ export default {
 .chart-container {
     width: 100%;
 }
-/* .bieudo.scorllWidth {
+.bieudo.scorllWidth {
     overflow-x: scroll;
     overflow-y: hidden;
-} */
+}
 </style>

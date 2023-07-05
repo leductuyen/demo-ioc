@@ -26,6 +26,8 @@ export default {
     .title-main {
         font-size: 16px;
         padding-bottom: 8px;
+        margin-left: 15px;
+        margin-top: 5px;
     }
 }
 

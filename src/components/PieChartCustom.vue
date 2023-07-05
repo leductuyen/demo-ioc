@@ -71,7 +71,10 @@ export default {
                         }
                     }
                 },
-                colors: this.getColors()
+                colors: this.getColors(),
+                legend: {
+                    show: false
+                }
             }
 
             const chartContainer = this.$refs.chartContainer
