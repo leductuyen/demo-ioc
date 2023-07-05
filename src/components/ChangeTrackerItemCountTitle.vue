@@ -58,7 +58,7 @@ export default {
                     return false
                 })
             } else {
-                return []
+                return [{ tenDonVi: '  Sở GD&ĐT Tỉnh Lào Cai - [10]' }]
             }
         }
     },
