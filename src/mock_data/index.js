@@ -917,3 +917,30 @@ export const xaxisCategories_TongQuanChung = {
     trangThai: ['Đang học', 'Chuyển trường'],
     hocLuc: ['Giỏi', 'Khá', 'Trung bình', 'Yếu', 'Kém', 'Khác']
 }
+
+const total = [
+    {
+        name: 'GDTX',
+        data: [0, 2, 0]
+    },
+    {
+        name: 'MN',
+        data: [0, 159, 16]
+    },
+    {
+        name: 'THCS',
+        data: [0, 149, 7]
+    },
+    {
+        name: 'TH',
+        data: [0, 219, 23]
+    },
+    {
+        name: 'LC',
+        data: [0, 5, 0]
+    },
+    {
+        name: 'THPT',
+        data: [0, 20, 1]
+    }
+]

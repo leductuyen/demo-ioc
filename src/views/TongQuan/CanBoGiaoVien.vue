@@ -95,29 +95,28 @@
                     />
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Trường học'"
-                        :data="dataThongKeTangGiam.dataThongKeTruongHoc.amount"
-                        :status="dataThongKeTangGiam.dataThongKeTruongHoc.status"
-                        :percent="
-                            dataThongKeTangGiam.dataThongKeTruongHoc.percent
+                    <CustomStatistic
+                        :title="'Tổng số giáo viên'"
+                        :data="dataThongKeTangGiam.dataCount_CanBoGiaoVien"
+                        :content="'cán bộ-giáo viên'"
+                    />
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <CustomStatistic
+                        :title="'Số lượng CBGV đang làm việc'"
+                        :data="
+                            dataThongKeTangGiam.dataCount_DangLamViec_CanBoGiaoVien
                         "
+                        :content="'cán bộ-giáo viên'"
                     />
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Giáo viên'"
-                        :data="dataThongKeTangGiam.dataThongKeGiaoVien.amount"
-                        :status="dataThongKeTangGiam.dataThongKeGiaoVien.status"
-                        :percent="dataThongKeTangGiam.dataThongKeGiaoVien.percent"
-                    />
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Giáo viên'"
-                        :data="dataThongKeTangGiam.dataThongKeHocSinh.amount"
-                        :status="dataThongKeTangGiam.dataThongKeHocSinh.status"
-                        :percent="dataThongKeTangGiam.dataThongKeHocSinh.percent"
+                    <CustomStatistic
+                        :title="'Số lượng CBGV trình độ đại học'"
+                        :data="
+                            dataThongKeTangGiam.dataCount_TrinhDoDaiHoc_CanBoGiaoVien
+                        "
+                        :content="'cán bộ-giáo viên'"
                     />
                 </div>
             </div>
@@ -152,13 +151,12 @@ import CustomTitle from '@/components/CustomTitle.vue'
 import ESelect from '@/components/ESelect.vue'
 import ESelectYear from '@/components/ESelectYear.vue'
 import { mapState } from 'vuex'
-import ChangeTrackerItem from '@/components/ChangeTrackerItem.vue'
 import EducatorProfile from '../EducatorProfile.vue'
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
 import { ESelectGradeLevel_MockData } from '@/mock_data/index'
 import ChangeTrackerItemCountTitle from '@/components/ChangeTrackerItemCountTitle.vue'
-
+import CustomStatistic from '@/components/CustomStatistic.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 
 export default {
@@ -168,9 +166,9 @@ export default {
         EducatorProfile,
         ESelect,
         ESelectYear,
-        ChangeTrackerItem,
         ChangeTrackerItemCountTitle,
-        CustomTitle
+        CustomTitle,
+        CustomStatistic
     },
     data() {
         return {
@@ -219,9 +217,9 @@ export default {
                 selectedValueSchoolYear: null //chonnamhoc
             },
             dataThongKeTangGiam: {
-                dataThongKeTruongHoc: {},
-                dataThongKeGiaoVien: {},
-                dataThongKeHocSinh: {}
+                dataCount_CanBoGiaoVien: null,
+                dataCount_DangLamViec_CanBoGiaoVien: null,
+                dataCount_TrinhDoDaiHoc_CanBoGiaoVien: null
             },
 
             getDataBieuDoCanBoGiaoVienNhanVien: {
@@ -270,25 +268,25 @@ export default {
             // store.commit('SET_DATA_CHONTRUONGHOC_STORE', response.rows)
         },
 
-        async getDataThongKeTangGiam(type, dataKey) {
+        async getDataCount_CanBoGiaoVien() {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 1
 
             this.requestData_ThongKeTangGiam = {
                 ...this.requestData_ThongKeTangGiam,
                 maSo: this.authUser.province,
-                type: type,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                type: 2,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.thongKeTangGiam,
                 this.requestData_ThongKeTangGiam,
                 this.requestHeaders
             )
-            this.dataThongKeTangGiam[dataKey] = response.item
+            this.dataThongKeTangGiam.dataCount_CanBoGiaoVien =
+                response.item.currentAmount
         },
         async customGetDataPhanLoaiCanBo(apiEndpoint, dataKey, responseKey) {
             this.requestHeaders = {
@@ -317,6 +315,57 @@ export default {
                         response.item.listData
                     break
             }
+
+            let soLuongCBGVDangLamViec =
+                this.getDataBieuDoPhanLoaiCanBo.dataBieuDoTrangThai_CBGVNV
+            let sum_soLuongCBGVDangLamViec = soLuongCBGVDangLamViec.reduce(
+                (accumulator, currentValue) => accumulator + currentValue.data[0],
+                0
+            )
+
+            this.dataThongKeTangGiam.dataCount_DangLamViec_CanBoGiaoVien =
+                sum_soLuongCBGVDangLamViec
+        },
+        async customGetDataCanBoGiaoVienNhanVien(
+            apiEndpoint,
+            dataKey,
+            responseKey
+        ) {
+            this.requestHeaders = {
+                token: this.authToken
+            }
+            const currentYear = new Date().getFullYear()
+            this.requestData_BieuDoCanBoGiaoVienNhanVien = {
+                ...this.requestData_BieuDoCanBoGiaoVienNhanVien,
+                maSo: this.authUser.province,
+                namHoc:
+                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+            }
+            const response = await sendRequest(
+                apiEndpoint,
+                this.requestData_BieuDoCanBoGiaoVienNhanVien,
+                this.requestHeaders
+            )
+            switch (responseKey) {
+                case 'bieudoTron':
+                    this.getDataBieuDoCanBoGiaoVienNhanVien[dataKey] =
+                        response.item.listValue
+                    break
+                case 'bieudoCot':
+                    this.getDataBieuDoCanBoGiaoVienNhanVien[dataKey] =
+                        response.item.listData
+                    break
+            }
+            let soLuongCBGVTrinhDoDaiHoc =
+                this.getDataBieuDoCanBoGiaoVienNhanVien
+                    .dataBieuDoTrinhDoChinh_CBGVNV
+
+            let sum_soLuongCBGVTrinhDoDaiHoc = soLuongCBGVTrinhDoDaiHoc.reduce(
+                (accumulator, currentValue) => accumulator + currentValue.data[2],
+                0
+            )
+            this.dataThongKeTangGiam.dataCount_TrinhDoDaiHoc_CanBoGiaoVien =
+                sum_soLuongCBGVTrinhDoDaiHoc
         },
         async getDataBieuDoTongQuan_CBGVNV() {
             await this.customGetDataCanBoGiaoVienNhanVien(
@@ -419,8 +468,6 @@ export default {
                 this.requestData_ThongKeTangGiam =
                     requestData_ThongKeTangGiam_Update
 
-                // xử lý việc khi click thì sẽ lấy lại dữ liệu cho BieuDoTongQuan, BieuDoChatLuongDaoTao, BieuDoLoaiHinhDaoTao
-
                 const requestData_BieuDoCanBoGiaoVienNhanVien_Update = {
                     ...this.requestData_BieuDoCanBoGiaoVienNhanVien,
                     capHocs: capHocs_Update,
@@ -431,19 +478,13 @@ export default {
                 this.requestData_BieuDoCanBoGiaoVienNhanVien =
                     requestData_BieuDoCanBoGiaoVienNhanVien_Update
 
-                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
-                await this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-                await this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-                await this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
-
+                await this.getDataCount_CanBoGiaoVien()
                 await this.getDataBieuDoTongQuan_CBGVNV()
+                await this.getDataBieuDoTrangThai_CBGVNV()
                 await this.getDataBieuDoTrinhDoChinh_CBGVNV()
+                await this.getDataBieuDoDoTuoi_CBGVNV()
                 await this.getDataBieuDoGioiTinh_CBGVNV()
                 await this.getDataBieuDoLoaiHopDong_CBGVNV()
-
-                await this.getDataBieuDoDoTuoi_CBGVNV()
-
-                await this.getDataBieuDoTrangThai_CBGVNV()
 
                 setTimeout(() => {
                     loading.close()
@@ -467,38 +508,6 @@ export default {
                         .split('')
                         .map(Number)
             }
-        },
-
-        async customGetDataCanBoGiaoVienNhanVien(
-            apiEndpoint,
-            dataKey,
-            responseKey
-        ) {
-            this.requestHeaders = {
-                token: this.authToken
-            }
-            const currentYear = new Date().getFullYear()
-            this.requestData_BieuDoCanBoGiaoVienNhanVien = {
-                ...this.requestData_BieuDoCanBoGiaoVienNhanVien,
-                maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
-            }
-            const response = await sendRequest(
-                apiEndpoint,
-                this.requestData_BieuDoCanBoGiaoVienNhanVien,
-                this.requestHeaders
-            )
-            switch (responseKey) {
-                case 'bieudoTron':
-                    this.getDataBieuDoCanBoGiaoVienNhanVien[dataKey] =
-                        response.item.listValue
-                    break
-                case 'bieudoCot':
-                    this.getDataBieuDoCanBoGiaoVienNhanVien[dataKey] =
-                        response.item.listData
-                    break
-            }
         }
     },
     computed: {
@@ -516,19 +525,14 @@ export default {
 
     mounted() {
         this.getDataChonTruonghoc()
-
-        this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-        this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-        this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
+        this.getDataCount_CanBoGiaoVien()
 
         this.getDataBieuDoTongQuan_CBGVNV()
+        this.getDataBieuDoTrangThai_CBGVNV()
         this.getDataBieuDoTrinhDoChinh_CBGVNV()
+        this.getDataBieuDoDoTuoi_CBGVNV()
         this.getDataBieuDoGioiTinh_CBGVNV()
         this.getDataBieuDoLoaiHopDong_CBGVNV()
-
-        this.getDataBieuDoDoTuoi_CBGVNV()
-
-        this.getDataBieuDoTrangThai_CBGVNV()
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()

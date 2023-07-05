@@ -41,7 +41,7 @@ export default {
     font-size: 18px !important;
 }
 .test span {
-    font-size: 16px !important;
+    font-size: 13px !important;
 }
 .layout-data {
     display: flex;
