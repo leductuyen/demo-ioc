@@ -129,6 +129,7 @@ export default {
                     // Hiển thị thông báo lỗi hoặc thực hiện xử lý khác
                 }
                 localStorage.setItem('activeMenu', path)
+                localStorage.setItem('activeUI', path)
             }
         },
         toggleSelect(item) {
@@ -140,12 +141,11 @@ export default {
         handleSelectChange(item, child) {
             this.selectedOption = child
 
-            if (this.$route.path !== child.path) {
+            if (child && child.path) {
                 const route = this.$router.resolve({ path: child.path })
 
                 if (route.resolved.matched.length > 0) {
                     this.$router.push(child.path)
-                    console.log(child.path)
                 } else {
                     console.log(`Đường dẫn ${child.path} không tồn tại`)
                     // Hiển thị thông báo lỗi hoặc thực hiện xử lý khác
@@ -162,6 +162,17 @@ export default {
     mounted() {
         // Khôi phục trạng thái active từ Local Storage
         this.activeMenu = localStorage.getItem('activeMenu')
+        const activeUI = localStorage.getItem('activeUI')
+        if (activeUI && this.$route.path !== activeUI) {
+            // Kiểm tra đường dẫn có khác với đường dẫn hiện tại không
+            const route = this.$router.resolve({ path: activeUI })
+            if (route.resolved.matched.length > 0) {
+                this.$router.push(activeUI)
+            } else {
+                console.log(`Đường dẫn ${activeUI} không tồn tại`)
+                // Hiển thị thông báo lỗi hoặc thực hiện xử lý khác
+            }
+        }
     }
 }
 </script>

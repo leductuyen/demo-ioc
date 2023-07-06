@@ -314,21 +314,16 @@ const router = new VueRouter({
     routes
 })
 
-const checkTokenInLocalStorage = () => {
-    const token = localStorage.getItem('token')
-    return token !== null && token !== undefined
-}
-
 router.beforeEach((to, from, next) => {
-    const requiresAuth = to.matched.some((route) => route.meta.requiresAuth)
+    document.title = `${to.meta.title} | Đồng bộ CSDL`
+    // Kiểm tra xem trong Local Storage có token hay không
+    const token = localStorage.getItem('token')
 
-    if (requiresAuth && !checkTokenInLocalStorage()) {
+    if (!token && to.path !== '/login') {
+        // Nếu không có token và đang không ở trang login, chuyển hướng đến path login
         next('/login')
     } else {
         next()
     }
-    document.title = `${to.meta.title} | Đồng bộ CSDL`
-
-    next()
 })
 export default router

@@ -138,6 +138,7 @@ export default {
                     store.commit('SET_AUTH_USER', response)
                     store.commit('SET_AUTH_TOKEN', response.token)
                     localStorage.setItem('activeMenu', '/dashboard')
+                    localStorage.setItem('activeUI', '/dashboard')
                 } else if (response.rc === 1 || response.rc === 27) {
                     setTimeout(() => {
                         loading.close()
