@@ -244,26 +244,26 @@ export default {
             this.getDataESelect.ESelectSchool = response.rows
         },
 
-        async getDataCount_TruongHoc() {
-            this.requestHeaders = {
-                token: this.authToken
-            }
-            const currentYear = new Date().getFullYear() - 1
+        // async getDataCount_TruongHoc() {
+        //     this.requestHeaders = {
+        //         token: this.authToken
+        //     }
+        //     const currentYear = new Date().getFullYear() - 1
 
-            this.requestData_ThongKeTangGiam = {
-                ...this.requestData_ThongKeTangGiam,
-                maSo: this.authUser.province,
-                type: 1,
-                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
-            }
-            const response = await sendRequest(
-                Api.thongKeTangGiam,
-                this.requestData_ThongKeTangGiam,
-                this.requestHeaders
-            )
-            this.dataThongKeTangGiam.dataThongKeTruongHoc =
-                response.item.currentAmount
-        },
+        //     this.requestData_ThongKeTangGiam = {
+        //         ...this.requestData_ThongKeTangGiam,
+        //         maSo: this.authUser.province,
+        //         type: 3,
+        //         namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
+        //     }
+        //     const response = await sendRequest(
+        //         Api.thongKeTangGiam,
+        //         this.requestData_ThongKeTangGiam,
+        //         this.requestHeaders
+        //     )
+        //     this.dataThongKeTangGiam.dataThongKeTruongHoc =
+        //         response.item.currentAmount
+        // },
 
         async getDataBieuDoTongQuan_TrongHoc() {
             await this.customGetDataBieuDoTruongHoc(
@@ -358,7 +358,7 @@ export default {
                     requestData_BieuDoTruongHoc_Update
 
                 // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
-                await this.getDataCount_TruongHoc()
+                // await this.getDataCount_TruongHoc()
                 await this.getDataBieuDoTongQuan_TrongHoc()
                 await this.getDataBieuDoChatLuongDaoTao_TruongHoc()
                 await this.getDataBieuDoLoaiHinhDaoTao_TruongHoc()
@@ -412,6 +412,13 @@ export default {
                     break
             }
 
+            let tongSoHocSinh =
+                this.getDataBieuDoTruongHoc.dataBieuDoTongQuan_TruongHoc.reduce(
+                    (accumulator, currentValue) => accumulator + currentValue,
+                    0
+                )
+            this.dataThongKeTangGiam.dataThongKeTruongHoc = tongSoHocSinh
+
             let soTruongDatChuanMuc =
                 this.getDataBieuDoTruongHoc.dataBieuDoChatLuongDaoTao_TruongHoc
 
@@ -443,7 +450,7 @@ export default {
     mounted() {
         this.getDataChonTruonghoc()
 
-        this.getDataCount_TruongHoc()
+        // this.getDataCount_TruongHoc()
 
         this.getDataBieuDoTongQuan_TrongHoc()
         this.getDataBieuDoChatLuongDaoTao_TruongHoc()
