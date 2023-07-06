@@ -112,6 +112,12 @@ const Api = {
             url: 'csdlgd-report-api/dasboard/ketquahoctap'
         }
     },
+    banDo:{
+        getData:{
+            method: METHOD.POST,
+            url: 'csdlgd-report-api/ioc/data'
+        }
+    },
     tiepNhanDuLieuQLNT: {
         cauHinhLichDongBo: {
             capSo: {

@@ -395,10 +395,10 @@
             :fullscreen="true"
         >
             <span slot="title" class="custom-dialog-title">
-                Đẩy dữ liệu học sinh - Trường: {{ titleModal?.tenTruong }} - [{{
-                    titleModal?.maTruong
-                }}] - Năm học: {{ titleModal?.namHoc }} -
-                {{ titleModal?.namHoc + 1 }}
+<!--                Đẩy dữ liệu học sinh - Trường: {{ titleModal?.tenTruong }} - [{{-->
+<!--                    titleModal?.maTruong-->
+<!--                }}] - Năm học: {{ titleModal?.namHoc }} - -->
+<!--                {{ titleModal?.namHoc + 1 }}-->
                 <hr />
             </span>
             <el-tabs type="border-card">
