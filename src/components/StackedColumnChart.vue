@@ -101,7 +101,7 @@ export default {
                 this.chart.updateSeries(
                     newData.map((item) => ({
                         name: item.name,
-                        data: item.data.map((value) => value.toLocaleString())
+                        data: item.data
                     }))
                 )
                 this.chart.updateOptions({

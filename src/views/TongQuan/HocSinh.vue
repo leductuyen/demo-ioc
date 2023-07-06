@@ -95,37 +95,25 @@
                     />
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Trường học'"
-                        :data="dataThongKeTangGiam.dataThongKeTruongHoc.amount"
-                        :status="dataThongKeTangGiam.dataThongKeTruongHoc.status"
-                        :percent="
-                            dataThongKeTangGiam.dataThongKeTruongHoc.percent
+                    <CustomStatistic
+                        :title="'Tổng số học sinh'"
+                        :data="dataThongKeTangGiam.dataThongKeCount_HocSinh"
+                        :content="'học sinh'"
+                    />
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <CustomStatistic
+                        :title="'Tổng số học sinh đang học'"
+                        :data="
+                            dataThongKeTangGiam.dataThongKeCount_HocSinhDangHoc
                         "
+                        :content="'học sinh'"
                     />
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Giáo viên'"
-                        :data="dataThongKeTangGiam.dataThongKeGiaoVien.amount"
-                        :status="dataThongKeTangGiam.dataThongKeGiaoVien.status"
-                        :percent="dataThongKeTangGiam.dataThongKeGiaoVien.percent"
-                    />
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Giáo viên'"
-                        :data="dataThongKeTangGiam.dataThongKeHocSinh.amount"
-                        :status="dataThongKeTangGiam.dataThongKeHocSinh.status"
-                        :percent="dataThongKeTangGiam.dataThongKeHocSinh.percent"
-                    />
-                </div>
+                <div class="col-md-3 col-sm-6"></div>
             </div>
         </div>
 
-        <!-- ************ Trường học ************ -->
-
-        <!-- ************ Học sinh ************ -->
         <Student
             :dataBieuDoTongQuan_HocSinh="
                 getDataBieuDoHocSinh.dataBieuDoTongQuan_HocSinh
@@ -148,12 +136,11 @@
 <script>
 import CustomTitle from '@/components/CustomTitle.vue'
 import CustomButton from '@/components/CustomButton.vue'
+import CustomStatistic from '@/components/CustomStatistic.vue'
 import ESelect from '@/components/ESelect.vue'
 import ESelectYear from '@/components/ESelectYear.vue'
 import { mapState } from 'vuex'
-import ChangeTrackerItem from '@/components/ChangeTrackerItem.vue'
 import Student from '../Student.vue'
-
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
 import { ESelectGradeLevel_MockData } from '@/mock_data/index'
@@ -169,7 +156,7 @@ export default {
         CustomTitle,
         ESelect,
         ESelectYear,
-        ChangeTrackerItem,
+        CustomStatistic,
         ChangeTrackerItemCountTitle
     },
     data() {
@@ -213,9 +200,9 @@ export default {
                 selectedValueSchoolYear: null //chonnamhoc
             },
             dataThongKeTangGiam: {
-                dataThongKeTruongHoc: {},
-                dataThongKeGiaoVien: {},
-                dataThongKeHocSinh: {}
+                dataThongKeCount_HocSinh: null,
+                dataThongKeCount_HocSinhDangHoc: null,
+                dataThongKeCount_HocSinhLenLop: null
             },
 
             getDataBieuDoHocSinh: {
@@ -260,25 +247,25 @@ export default {
             // store.commit('SET_DATA_CHONTRUONGHOC_STORE', response.rows)
         },
 
-        async getDataThongKeTangGiam(type, dataKey) {
+        async getDataCount_HocSinh() {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 1
 
             this.requestData_ThongKeTangGiam = {
                 ...this.requestData_ThongKeTangGiam,
                 maSo: this.authUser.province,
-                type: type,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                type: 1,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.thongKeTangGiam,
                 this.requestData_ThongKeTangGiam,
                 this.requestHeaders
             )
-            this.dataThongKeTangGiam[dataKey] = response.item
+            this.dataThongKeTangGiam.dataThongKeCount_HocSinh =
+                response.item.currentAmount
         },
 
         async getDataBieuDoTongQuan_HocSinh() {
@@ -362,7 +349,7 @@ export default {
                     'selectedValueSchool'
                 )
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
-                // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
+
                 const requestData_ThongKeTangGiam_Update = {
                     ...this.requestData_ThongKeTangGiam,
                     capHocs: capHocs_Update,
@@ -374,8 +361,6 @@ export default {
                 this.requestData_ThongKeTangGiam =
                     requestData_ThongKeTangGiam_Update
 
-                // xử lý việc khi click thì sẽ lấy lại dữ liệu cho BieuDoTongQuan, BieuDoChatLuongDaoTao, BieuDoLoaiHinhDaoTao
-
                 const requestData_BieuDoHocSinh_Update = {
                     ...this.requestData_BieuDoHocSinh,
                     capHocs: capHocs_Update,
@@ -385,10 +370,7 @@ export default {
                 }
                 this.requestData_BieuDoHocSinh = requestData_BieuDoHocSinh_Update
 
-                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
-                await this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-                await this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-                await this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
+                await this.getDataCount_HocSinh()
 
                 await this.getDataBieuDoTongQuan_HocSinh()
                 await this.getDataBieuDoTrangThai_HocSinh()
@@ -444,6 +426,15 @@ export default {
                     this.getDataBieuDoHocSinh[dataKey] = response.item.listData
                     break
             }
+
+            let tongSoHocSinhDangHoc =
+                this.getDataBieuDoHocSinh.dataBieuDoTrangThai_HocSinh.reduce(
+                    (accumulator, currentValue) =>
+                        accumulator + currentValue.data[0],
+                    0
+                )
+            this.dataThongKeTangGiam.dataThongKeCount_HocSinhDangHoc =
+                tongSoHocSinhDangHoc
         }
     },
     computed: {
@@ -461,10 +452,7 @@ export default {
 
     mounted() {
         this.getDataChonTruonghoc()
-
-        this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-        this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-        this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
+        this.getDataCount_HocSinh()
 
         this.getDataBieuDoTongQuan_HocSinh()
         this.getDataBieuDoTrangThai_HocSinh()

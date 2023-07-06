@@ -291,6 +291,14 @@ const Api = {
                 url: 'csdlgd-admin/nop-bieu-mau/update'
             }
         }
+    },
+    ioc: {
+        tongQuan: {
+            thongKeYTe: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/thongKeYte'
+            }
+        }
     }
 }
 

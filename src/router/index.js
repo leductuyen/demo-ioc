@@ -75,7 +75,8 @@ const routes = [
         name: 'DashBoard',
         component: TongQuanChung, // router trang chủ
         meta: {
-            title: 'Dash Board'
+            title: 'Dash Board',
+            requiresAuth: true
         }
     },
     {
@@ -315,7 +316,14 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | Đồng bộ CSDL`
+    // Kiểm tra xem trong Local Storage có token hay không
+    const token = localStorage.getItem('token')
 
-    next()
+    if (!token && to.path !== '/login') {
+        // Nếu không có token và đang không ở trang login, chuyển hướng đến path login
+        next('/login')
+    } else {
+        next()
+    }
 })
 export default router
