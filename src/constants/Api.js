@@ -112,8 +112,8 @@ const Api = {
             url: 'csdlgd-report-api/dasboard/ketquahoctap'
         }
     },
-    banDo:{
-        getData:{
+    banDo: {
+        getData: {
             method: METHOD.POST,
             url: 'csdlgd-report-api/ioc/data'
         }
@@ -297,6 +297,10 @@ const Api = {
             thongKeYTe: {
                 method: METHOD.POST,
                 url: 'csdlgd-report-api/dasboard/thongKeYte'
+            },
+            bieuDoYTe: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/bieuDoYte'
             }
         }
     }

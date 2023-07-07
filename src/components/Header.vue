@@ -10,10 +10,10 @@
         <div class="header-layout">
             <div class="header-left">
                 <a class="logo" v-if="!isCollapseLeftBar">
-                    <img src="./../assets/img/logo.png" alt="Logo" />
+                    <img src="./../assets/img/logoBig.png" alt="Logo" />
                 </a>
                 <a v-else class="logo">
-                    <img src="./../assets/img/logo-small.png" alt="Logo" />
+                    <img src="./../assets/img/logoSmall.jpg" alt="Logo" />
                 </a>
                 <button @click="toggleCollapseLeftBar">
                     <div class="border">

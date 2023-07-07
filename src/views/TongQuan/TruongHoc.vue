@@ -412,12 +412,12 @@ export default {
                     break
             }
 
-            let tongSoHocSinh =
+            let tongSoTruongHoc =
                 this.getDataBieuDoTruongHoc.dataBieuDoTongQuan_TruongHoc.reduce(
                     (accumulator, currentValue) => accumulator + currentValue,
                     0
                 )
-            this.dataThongKeTangGiam.dataThongKeTruongHoc = tongSoHocSinh
+            this.dataThongKeTangGiam.dataThongKeTruongHoc = tongSoTruongHoc
 
             let soTruongDatChuanMuc =
                 this.getDataBieuDoTruongHoc.dataBieuDoChatLuongDaoTao_TruongHoc
