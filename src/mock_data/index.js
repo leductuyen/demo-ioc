@@ -849,12 +849,12 @@ export const mockData_BieuDoDashedLineChart = {
     loaiHinhTruong: {
         series: [
             {
-                name: 'Tổng số học sinh',
-                data: [230000, 233000, 233600, 324000, 342500, 362000, 392120]
+                data: [230000, 233000, 233600, 324000, 342500, 362000, 392120],
+                name: 'Tổng số học sinh'
             },
             {
-                name: 'Công lập',
-                data: [79000, 89300, 99901, 110352, 120000, 135062, 151695]
+                data: [79000, 89300, 99901, 110352, 120000, 135062, 151695],
+                name: 'Công lập'
             },
             {
                 name: 'Dân lập',
@@ -899,8 +899,8 @@ export const mockData_BieuDoDashedLineChart = {
             }
         ],
         categories: [
-            '2018-2019',
-            '2019-2020',
+            2018 - 2019,
+            2019 - 2020,
             '2020-2021',
             '2021-2022',
             '2022-2023',

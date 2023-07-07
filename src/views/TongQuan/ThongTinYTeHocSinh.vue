@@ -145,14 +145,12 @@
                         </div>
                         <div class="card-body">
                             <!-- <StackedColumnChart
-                                :data_StackedColumnChart="
-                                    getDataBieuDoThongTinYTeHocSinh.dataBieuDoCot_ThongTinYTeHocSinh
-                                "
-                                :xaxis_categories="xaxisCategories.loaiHopDong"
+                                :data_StackedColumnChart="data_StackedColumnChart"
+                                :xaxis_categories="xaxisCategories.chiSoBMI"
                             /> -->
                             <StackedColumnChartCustom
                                 :data_StackedColumnChart="data_StackedColumnChart"
-                                :xaxis_categories="xaxisCategories.loaiHopDong"
+                                :xaxis_categories="xaxis_categories1"
                             />
                         </div>
                     </div>
@@ -195,14 +193,16 @@ export default {
         return {
             data_StackedColumnChart: [
                 {
-                    name: 'Series 1',
-                    data: [10, 20, 30, 40]
+                    name: 'Danh sách 1',
+                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
                 },
                 {
-                    name: 'Series 2',
-                    data: [15, 25, 35, 45]
+                    name: 'Danh sách 2',
+                    data: [23, 41, 42, 69, 64, 74, 65, 86, 97]
                 }
+                // Thêm danh sách khác nếu cần
             ],
+            xaxis_categories1: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
             xaxisCategories: {
                 chiSoBMI: [
                     'Bình thường',
@@ -407,17 +407,19 @@ export default {
                 request_Data,
                 this.requestHeaders
             )
-            const customDataBieuDoTron = response.item.bieuDoDinhDuong.map(
-                (item) => item.value
-            )
-            this.getDataBieuDoThongTinYTeHocSinh.dataBieuDoTron_ThongTinYTeHocSinh =
-                customDataBieuDoTron
+            if (response.rc == 0) {
+                const customDataBieuDoTron = response.item.bieuDoDinhDuong.map(
+                    (item) => item.value
+                )
+                this.getDataBieuDoThongTinYTeHocSinh.dataBieuDoTron_ThongTinYTeHocSinh =
+                    customDataBieuDoTron
 
-            const customDataBieuDoCot = response.item.bieuDoSucKhoe
-            this.getDataBieuDoThongTinYTeHocSinh.dataBieuDoCot_ThongTinYTeHocSinh =
-                customDataBieuDoCot
-            console.log(customDataBieuDoCot)
-            loading.close()
+                const customDataBieuDoCot = response.item.bieuDoSucKhoe
+                this.getDataBieuDoThongTinYTeHocSinh.dataBieuDoCot_ThongTinYTeHocSinh =
+                    customDataBieuDoCot
+                console.log(customDataBieuDoCot)
+                loading.close()
+            }
         },
         handleESelectChange(source, ...selectedOptions) {
             switch (source) {

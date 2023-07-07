@@ -302,6 +302,20 @@ const Api = {
                 method: METHOD.POST,
                 url: 'csdlgd-report-api/dasboard/bieuDoYte'
             }
+        },
+        duBao: {
+            soLuongGiaoVien: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/thongKeNgoaiSuyGiaoVien'
+            },
+            hocSinhBienDong: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/thongKeNgoaiSuyHocSinh'
+            },
+            ketQuaHocTap: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/thongKeNgoaiSuyKqht'
+            }
         }
     }
 }

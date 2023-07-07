@@ -62,9 +62,6 @@ export default {
                                 style: {
                                     fontSize: '13px',
                                     fontWeight: 900
-                                },
-                                formatter: function (val) {
-                                    return val.toLocaleString() // Định dạng số thành chuỗi
                                 }
                             }
                         }

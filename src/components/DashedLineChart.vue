@@ -13,7 +13,9 @@ export default {
         return {}
     },
     mounted() {
-        this.bindData(this.dulieu)
+        // if (this.dulieu.series && this.dulieu.categories) {
+        //     this.bindData(this.dulieu)
+        // }
     },
     components: {
         // apexchart: ApexCharts,
@@ -37,11 +39,13 @@ export default {
             }
         },
         bindData(e) {
-            let element = this.$refs.bieudo
-            let series = e.series
-            let categories = e.categories
-            let totalText = e.totalText
-            this.generateChart(series, categories, element, totalText)
+            if (e.series && e.categories) {
+                let element = this.$refs.bieudo
+                let series = e.series
+                let categories = e.categories
+                let totalText = e.totalText
+                this.generateChart(series, categories, element, totalText)
+            }
         },
         generateChart(series, categories, element, totalText) {
             let chart
@@ -131,11 +135,11 @@ export default {
                     }
                 },
                 dataLabels: {
-                    formatter(val, opts) {
-                        const name = opts.w.globals.labels[opts.seriesIndex]
-                        const tong = opts.w.globals.seriesTotals[opts.seriesIndex]
-                        return [name, val.toFixed(2) + '%']
-                    },
+                    // formatter(val, opts) {
+                    //     const name = opts.w.globals.labels[opts.seriesIndex]
+                    //     const tong = opts.w.globals.seriesTotals[opts.seriesIndex]
+                    //     return [name, val.toFixed(2) + '%']
+                    // },
                     style: {
                         fontSize: '12px',
                         fontWeight: 'bold'

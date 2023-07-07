@@ -782,7 +782,7 @@ export default {
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear() - 1
         this.selectedValue.selectedValueSchoolYear = String(currentYear)
-        this.handleThongKe()
+        // this.handleThongKe()
     }
 }
 </script>

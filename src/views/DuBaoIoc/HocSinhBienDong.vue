@@ -89,7 +89,7 @@
                         <div class="card-body">
                             <DashedLineChart
                                 :dulieu="
-                                    mockData_BieuDoDashedLineChart.loaiHinhTruong
+                                    getDataBieuDo_HSBienDong.dataBieuDo_HS_LoaiHinhTruong
                                 "
                             />
                         </div>
@@ -104,7 +104,9 @@
                         </div>
                         <div class="card-body">
                             <DashedLineChart
-                                :dulieu="mockData_BieuDoDashedLineChart.khuVuc"
+                                :dulieu="
+                                    getDataBieuDo_HSBienDong.dataBieuDo_HS_KhuVuc
+                                "
                             />
                         </div>
                     </div>
@@ -134,14 +136,14 @@ export default {
             mockData_BieuDoDashedLineChart: mockData_BieuDoDashedLineChart,
 
             resetESelectSchool: false,
-
-            requesData_BieuDoPhoDiem: {
+            requestData_BieuDo: {
                 capHocs: [],
                 maDonVis: [],
                 maSo: null,
                 maTruongs: [],
-                namHoc: null
+                type: null
             },
+
             getDataESelect: {
                 ESelectUnitEducation: [], //chondonvi
                 ESelectGradeLevel_MockData: ESelectGradeLevel_MockData, // chon cap hoc
@@ -155,9 +157,9 @@ export default {
                 selectedValueSchool: [], //chontruonghoc
                 selectedValueSchoolYear: null //chonnamhoc
             },
-            getDataBieuDoPhoDiem: {
-                dataBieuDoPhoDiemHKI_PhoDiem: [],
-                dataBieuDoPhoDiemHKII_PhoDiem: []
+            getDataBieuDo_HSBienDong: {
+                dataBieuDo_HS_LoaiHinhTruong: {},
+                dataBieuDo_HS_KhuVuc: {}
             }
         }
     },
@@ -190,45 +192,54 @@ export default {
             this.getDataESelect.ESelectSchool = response.rows
             // store.commit('SET_DATA_CHONTRUONGHOC_STORE', response.rows)
         },
-        async getDataBieuDoPhoDiemHocKyI_PhoDiem() {
+
+        async getDataBieuDo() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading ...',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
+            const maDonVis = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueUnitEducation,
+                'selectedValueUnitEducation'
+            )
+            const capHocs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueGradeLevel,
+                'selectedValueGradeLevel'
+            )
+            const maTruongs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueSchool,
+                'selectedValueSchool'
+            )
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
-            this.requesData_BieuDoPhoDiem = {
-                ...this.requesData_BieuDoPhoDiem,
-                maSo: this.authUser.province,
-                hocKy: 1,
-                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear,
+            const request_Data = {
+                ...this.requestData_BieuDo,
+                capHocs: capHocs,
+                maDonVis: maDonVis,
+                maSo: null,
+                maTruongs: maTruongs,
                 type: null
             }
             const response = await sendRequest(
-                Api.bieuDoPhoDiem.bieuDoPhoDiemHocKy,
-                this.requesData_BieuDoPhoDiem,
+                Api.ioc.duBao.hocSinhBienDong,
+                request_Data,
                 this.requestHeaders
             )
-            this.getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem =
-                response.item.listData
-        },
-        async getDataBieuDoPhoDiemHocKyII_PhoDiem() {
-            this.requestHeaders = {
-                token: this.authToken
+            if (response.rc == 0) {
+                this.getDataBieuDo_HSBienDong.dataBieuDo_HS_LoaiHinhTruong = {
+                    series: response.item.loaiHinhTruongSeries,
+                    categories: response.item.namHocs.map(String)
+                }
+                this.getDataBieuDo_HSBienDong.dataBieuDo_HS_KhuVuc = {
+                    series: response.item.khuVucSeries,
+
+                    categories: response.item.namHocs.map(String)
+                }
+                loading.close()
             }
-            const currentYear = new Date().getFullYear()
-            this.requesData_BieuDoPhoDiem = {
-                ...this.requesData_BieuDoPhoDiem,
-                maSo: this.authUser.province,
-                hocKy: 2,
-                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear,
-                type: null
-            }
-            const response = await sendRequest(
-                Api.bieuDoPhoDiem.bieuDoPhoDiemHocKy,
-                this.requesData_BieuDoPhoDiem,
-                this.requestHeaders
-            )
-            this.getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKII_PhoDiem =
-                response.item.listData
         },
         handleESelectChange(source, ...selectedOptions) {
             switch (source) {
@@ -255,12 +266,6 @@ export default {
         },
         async handleThongKe() {
             try {
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading ...',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                })
                 const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
                     this.selectedValue.selectedValueUnitEducation,
                     'selectedValueUnitEducation'
@@ -276,22 +281,15 @@ export default {
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
                 // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
 
-                const requesData_BieuDoPhoDiem_Update = {
-                    ...this.requesData_BieuDoPhoDiem,
+                const requesData_BieuDo_Update = {
+                    ...this.requestData_BieuDo,
                     capHocs: capHocs_Update,
                     maDonVis: maDonVis_Update,
                     maTruongs: maTruongs_Update,
                     namHoc: namHoc_Update
                 }
-                this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
-
-                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
-
-                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
-                await this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
-                setTimeout(() => {
-                    loading.close()
-                }, 2000)
+                this.requestData_BieuDo = requesData_BieuDo_Update
+                await this.getDataBieuDo()
             } catch (error) {
                 console.log(error)
             }
@@ -324,8 +322,7 @@ export default {
     },
     mounted() {
         this.getDataESelectSchool()
-        this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
-        this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+        this.getDataBieuDo()
     }
 }
 </script>
