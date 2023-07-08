@@ -77,7 +77,7 @@
             </template>
         </el-menu>
 
-        <div class="menu-title">
+        <div class="menu-logout" @click="handleLogout">
             <span v-if="isCollapseLeftBar === true" class="icon">
                 <el-tooltip
                     class="item"
@@ -91,22 +91,12 @@
                             size="small"
                             icon="el-icon-d-arrow-left"
                             type="text"
-                            @click="handleLogout"
                         />
                     </div>
                 </el-tooltip>
             </span>
-            <span v-if="isCollapseLeftBar === false">
-                <div style="margin-left: 4px">
-                    <CustomButton
-                        label="Đăng xuất"
-                        size="small"
-                        icon="el-icon-d-arrow-left"
-                        type="text"
-                        @click="handleLogout"
-                    />
-                </div>
-            </span>
+            <div><i class="el-icon-d-arrow-left"></i></div>
+            <div v-if="isCollapseLeftBar === false" class="logout">Đăng xuất</div>
         </div>
     </div>
 </template>
@@ -285,6 +275,22 @@ export default {
 .btn-icon {
     text-align: center;
     margin-left: 4px;
+}
+.menu-logout {
+    padding: 13px 20px 13px 20px;
+    display: flex;
+    align-items: center;
+}
+.logout {
+    font-size: 13px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 100;
+    padding: 5px 0px 2px 14px;
+}
+
+.menu-logout:hover {
+    cursor: pointer;
+    background-color: #8080807d;
 }
 @media (max-width: 768px) {
     .leftBar {
