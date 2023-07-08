@@ -459,13 +459,13 @@ export default {
                 this.requesData_BieuDoPhoDiem,
                 this.requestHeaders
             )
-
-            // this.getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc =
-            //     response.item.listData
+          this.dataBanDo = response;
+          console.log('DataBanDo:')
+          console.log(this.dataBanDo)
         },
         async getDataBieuDoDanhGiaHocSinh_HocLuc() {
             this.requestHeaders = {
-                token: this.authToken
+                token: this.authToken,
             }
             const currentYear = new Date().getFullYear()
             this.requesData_BieuDoPhoDiem = {

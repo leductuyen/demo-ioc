@@ -88,6 +88,7 @@
                     <div class="btn-icon">
                         <CustomButton
                             label=""
+                            size="small"
                             icon="el-icon-d-arrow-left"
                             type="text"
                             @click="handleLogout"
@@ -99,6 +100,7 @@
                 <div style="margin-left: 4px">
                     <CustomButton
                         label="Đăng xuất"
+                        size="small"
                         icon="el-icon-d-arrow-left"
                         type="text"
                         @click="handleLogout"
