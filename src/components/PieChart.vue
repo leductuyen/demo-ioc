@@ -58,7 +58,7 @@ export default {
                                 total: {
                                     show: true,
                                     label: 'Tổng số',
-                                    formatter: () => totalSchool.toString()
+                                    formatter: () => totalSchool.toLocaleString()
                                 }
                             }
                         }

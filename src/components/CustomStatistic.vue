@@ -4,8 +4,8 @@
             <span>{{ title }}</span>
             <div class="layout-data">
                 <div class="data">
-                    {{ data }}<span v-if="data2" class="span">/</span>
-                    {{ data2 }}
+                    {{ formatData(data) }}<span v-if="data2" class="span">/</span>
+                    {{ formatData(data2) }}
                 </div>
                 <div class="content">{{ content }}</div>
             </div>
@@ -27,6 +27,14 @@ export default {
         },
         data2: {
             type: Number
+        }
+    },
+    methods: {
+        formatData(data) {
+            if (typeof data === 'number' || typeof data === 'string') {
+                return data.toLocaleString()
+            }
+            return data
         }
     }
 }
@@ -54,16 +62,16 @@ export default {
     align-items: center;
 }
 .layout-data .span {
-    font-size: 23px;
+    font-size: 21px;
 }
 .data {
-    font-size: 23px;
+    font-size: 21px;
     font-weight: 700;
 }
 .content {
     font-size: 14px;
     font-weight: 100;
-    margin-top: 7px;
+    margin-top: 3px;
     margin-left: 3px;
 }
 </style>

@@ -196,6 +196,12 @@ export default {
         },
 
         async getDataBieuDo() {
+            const loading = this.$loading({
+                lock: true,
+                text: 'Loading ...',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+            })
             const maDonVis = this.customValueSelectedThongKeTangGiam(
                 this.selectedValue.selectedValueUnitEducation,
                 'selectedValueUnitEducation'
@@ -224,15 +230,19 @@ export default {
                 request_Data,
                 this.requestHeaders
             )
+            if (response) {
+                this.getDataBieuDo_DuBaoSoLuongGV.dataBieuDo_CBGV_LoaiHinhTruong =
+                    {
+                        series: response.item.loaiHinhTruongSeries,
+                        categories: response.item.namHocs.map(String)
+                    }
+                this.getDataBieuDo_DuBaoSoLuongGV.dataBieuDo_CBGv_TrinhDoChinhTri =
+                    {
+                        series: response.item.trinhDoChinhSeries,
 
-            this.getDataBieuDo_DuBaoSoLuongGV.dataBieuDo_CBGV_LoaiHinhTruong = {
-                series: response.item.loaiHinhTruongSeries,
-                categories: response.item.namHocs.map(String)
-            }
-            this.getDataBieuDo_DuBaoSoLuongGV.dataBieuDo_CBGv_TrinhDoChinhTri = {
-                series: response.item.trinhDoChinhSeries,
-
-                categories: response.item.namHocs.map(String)
+                        categories: response.item.namHocs.map(String)
+                    }
+                loading.close()
             }
         },
         handleESelectChange(source, ...selectedOptions) {
