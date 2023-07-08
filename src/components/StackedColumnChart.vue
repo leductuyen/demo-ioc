@@ -62,8 +62,24 @@ export default {
                                 style: {
                                     fontSize: '13px',
                                     fontWeight: 900
+                                },
+                                formatter: function (val) {
+                                    if (val !== undefined) {
+                                        return val.toLocaleString()
+                                    }
+                                    return val
                                 }
                             }
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (val) {
+                            if (val !== undefined) {
+                                return val.toLocaleString()
+                            }
+                            return val
                         }
                     }
                 },

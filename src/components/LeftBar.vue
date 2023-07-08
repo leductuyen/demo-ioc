@@ -76,6 +76,36 @@
                 </el-menu-item>
             </template>
         </el-menu>
+
+        <div class="menu-title">
+            <span v-if="isCollapseLeftBar === true" class="icon">
+                <el-tooltip
+                    class="item"
+                    effect="dark"
+                    content="Đăng xuất"
+                    placement="right"
+                >
+                    <div class="btn-icon">
+                        <CustomButton
+                            label=""
+                            icon="el-icon-d-arrow-left"
+                            type="text"
+                            @click="handleLogout"
+                        />
+                    </div>
+                </el-tooltip>
+            </span>
+            <span v-if="isCollapseLeftBar === false">
+                <div style="margin-left: 4px">
+                    <CustomButton
+                        label="Đăng xuất"
+                        icon="el-icon-d-arrow-left"
+                        type="text"
+                        @click="handleLogout"
+                    />
+                </div>
+            </span>
+        </div>
     </div>
 </template>
 
@@ -83,10 +113,10 @@
 import 'element-ui/lib/theme-chalk/index.css'
 import { permission_ioc } from '@/mock_data'
 import { mapMutations, mapState } from 'vuex'
-
+import CustomButton from './CustomButton.vue'
 export default {
     name: 'LeftBar',
-    components: {},
+    components: { CustomButton },
     data() {
         return {
             dataLeftBar: [],
@@ -133,7 +163,6 @@ export default {
             }
         },
         toggleSelect(item) {
-            console.log(item.hasChildren)
             if (item.hasChildren) {
                 item.showSelect = !item.showSelect
             }
@@ -156,6 +185,14 @@ export default {
         getIconElementUi(index) {
             const icons = ['el-icon-menu', 'el-icon-document', 'el-icon-set-up']
             return icons[index % icons.length]
+        },
+        handleLogout() {
+            localStorage.clear()
+            this.fullscreenLoading = true
+            setTimeout(() => {
+                this.fullscreenLoading = false
+                this.$router.push('/login')
+            }, 1000)
         }
     },
 
@@ -223,6 +260,12 @@ export default {
     padding: 5px 15px;
     white-space: nowrap;
 }
+.layout-btn {
+    display: flex;
+
+    flex-direction: row;
+    align-items: center;
+}
 
 .menu-title hr {
     border-top: 1px solid gray;
@@ -236,6 +279,10 @@ export default {
     bottom: 0;
     width: 83%;
     z-index: -1;
+}
+.btn-icon {
+    text-align: center;
+    margin-left: 4px;
 }
 @media (max-width: 768px) {
     .leftBar {

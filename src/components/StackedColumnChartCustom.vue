@@ -115,8 +115,7 @@ export default {
             required: true
         },
         xaxis_categories: {
-            type: Array,
-            required: true
+            type: Array
         }
     }
 }

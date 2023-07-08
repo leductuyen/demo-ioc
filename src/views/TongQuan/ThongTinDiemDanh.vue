@@ -95,29 +95,28 @@
                     />
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Trường học'"
-                        :data="dataThongKeTangGiam.dataThongKeTruongHoc.amount"
-                        :status="dataThongKeTangGiam.dataThongKeTruongHoc.status"
-                        :percent="
-                            dataThongKeTangGiam.dataThongKeTruongHoc.percent
+                    <CustomStatistic
+                        :title="'Tổng số học sinh'"
+                        :data="dataThongKeTangGiam.dataThongKe_TongSoHS"
+                        :content="'học sinh'"
+                    />
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <CustomStatistic
+                        :title="'Tổng số học sinh điểm danh'"
+                        :data="dataThongKeTangGiam.dataThongKe_TongSoHS_DiemDanh"
+                        :data2="dataThongKeTangGiam.dataThongKe_TongSoHS"
+                        :content="'học sinh'"
+                    />
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <CustomStatistic
+                        :title="'Nghỉ học có phép'"
+                        :data="
+                            dataThongKeTangGiam.dataThongKe_TongSoHS_NghiCoPhep
                         "
-                    />
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Giáo viên'"
-                        :data="dataThongKeTangGiam.dataThongKeGiaoVien.amount"
-                        :status="dataThongKeTangGiam.dataThongKeGiaoVien.status"
-                        :percent="dataThongKeTangGiam.dataThongKeGiaoVien.percent"
-                    />
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <ChangeTrackerItem
-                        :title="'Giáo viên'"
-                        :data="dataThongKeTangGiam.dataThongKeHocSinh.amount"
-                        :status="dataThongKeTangGiam.dataThongKeHocSinh.status"
-                        :percent="dataThongKeTangGiam.dataThongKeHocSinh.percent"
+                        :data2="dataThongKeTangGiam.dataThongKe_TongSoHS_TongNghi"
+                        :content="'học sinh'"
                     />
                 </div>
             </div>
@@ -152,9 +151,12 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <LineChart
+                            <LineChartCustom
                                 :data_LineChart="
                                     getDataBieuDoThongTinDiemDanh.dataBieuDoDuong_ThongTinDiemDanh
+                                "
+                                :xaxis_categories="
+                                    xaxisCategories.xaxis_categories_BieuDoDuong
                                 "
                             />
                         </div>
@@ -170,8 +172,8 @@ import CustomTitle from '@/components/CustomTitle.vue'
 import ESelect from '@/components/ESelect.vue'
 import ESelectYear from '@/components/ESelectYear.vue'
 import { mapState } from 'vuex'
-import ChangeTrackerItem from '@/components/ChangeTrackerItem.vue'
-import LineChart from '@/components/LineChart.vue'
+import CustomStatistic from '@/components/CustomStatistic.vue'
+import LineChartCustom from '@/components/LineChartCustom.vue'
 import PieChartCustom from '@/components/PieChartCustom.vue'
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
@@ -186,17 +188,17 @@ export default {
         CustomButton,
         ESelect,
         ESelectYear,
-        ChangeTrackerItem,
+        CustomStatistic,
         ChangeTrackerItemCountTitle,
         CustomTitle,
-        LineChart,
+        LineChartCustom,
         PieChartCustom
     },
     data() {
         return {
             xaxisCategories: {
-                diemDanhTrongNgay: ['Đi học', 'Nghỉ học'],
-                loaiHopDong: ['Nam', 'Nữ']
+                diemDanhTrongNgay: ['Nghỉ học', 'Đi học'],
+                xaxis_categories_BieuDoDuong: []
             },
             resetESelectSchool: false,
             requestHeaders: {
@@ -211,7 +213,6 @@ export default {
                 maDonVis: [],
                 maSo: null,
                 maTruongs: [],
-                type: null,
                 namHoc: null
             },
 
@@ -243,9 +244,10 @@ export default {
                 selectedValueSchoolYear: null //chonnamhoc
             },
             dataThongKeTangGiam: {
-                dataThongKeTruongHoc: {},
-                dataThongKeGiaoVien: {},
-                dataThongKeHocSinh: {}
+                dataThongKe_TongSoHS: null,
+                dataThongKe_TongSoHS_DiemDanh: null,
+                dataThongKe_TongSoHS_NghiCoPhep: null,
+                dataThongKe_TongSoHS_TongNghi: null
             },
 
             getDataBieuDoThongTinDiemDanh: {
@@ -287,35 +289,94 @@ export default {
             // store.commit('SET_DATA_CHONTRUONGHOC_STORE', response.rows)
         },
 
-        async getDataThongKeTangGiam(type, dataKey) {
-            this.requestHeaders = {
+        async getDataThongKeTangGiam() {
+            const maDonVis = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueUnitEducation,
+                'selectedValueUnitEducation'
+            )
+            const capHocs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueGradeLevel,
+                'selectedValueGradeLevel'
+            )
+            const maTruongs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueSchool,
+                'selectedValueSchool'
+            )
+            const namHocs = this.selectedValue.selectedValueSchoolYear
+            const currentYear = new Date().getFullYear() - 1
+            const request_Header = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
-
-            this.requestData_ThongKeTangGiam = {
+            const request_Data = {
                 ...this.requestData_ThongKeTangGiam,
-                maSo: this.authUser.province,
-                type: type,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                capHocs: capHocs,
+                maDonVis: maDonVis,
+                maSo: null,
+                maTruongs: maTruongs,
+                namHoc: namHocs || currentYear
             }
             const response = await sendRequest(
-                Api.thongKeTangGiam,
-                this.requestData_ThongKeTangGiam,
-                this.requestHeaders
+                Api.ioc.tongQuan.thongTinDiemDanh,
+                request_Data,
+                request_Header
             )
-            this.dataThongKeTangGiam[dataKey] = response.item
-        },
+            if (response.rc == 0) {
+                const tongSoHocSinh = response.item.tongHocSinh
+                this.dataThongKeTangGiam.dataThongKe_TongSoHS = tongSoHocSinh
 
-        async getDataBieuDoTron_ThongTinDiemDanh() {
-            await this.customGetDataThongTinDiemDanh(
-                Api.bieuDoCanBoGiaoVienNhanVien.bieuDoTongQuan,
-                'dataBieuDoTron_ThongDiemDanh',
-                'bieudoTron'
+                const hocSinhNghiHoc = response.item.tongNghi
+                const tongSoHocSinhDiemDanh = tongSoHocSinh - hocSinhNghiHoc
+                this.dataThongKeTangGiam.dataThongKe_TongSoHS_DiemDanh =
+                    tongSoHocSinhDiemDanh
+
+                this.dataThongKeTangGiam.dataThongKe_TongSoHS_NghiCoPhep =
+                    response.item.nghiCoPhep
+                this.dataThongKeTangGiam.dataThongKe_TongSoHS_TongNghi =
+                    response.item.tongNghi
+
+                this.getDataBieuDoThongTinDiemDanh.dataBieuDoTron_ThongDiemDanh =
+                    response.item.bieuDo
+            } else {
+                alert('Lỗi')
+            }
+        },
+        async getDataBieuDoDuong_DiemDanh() {
+            const maDonVis = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueUnitEducation,
+                'selectedValueUnitEducation'
             )
+            const capHocs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueGradeLevel,
+                'selectedValueGradeLevel'
+            )
+            const maTruongs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueSchool,
+                'selectedValueSchool'
+            )
+            const namHocs = this.selectedValue.selectedValueSchoolYear
+            const currentYear = new Date().getFullYear() - 1
+            const request_Header = {
+                token: this.authToken
+            }
+            const request_Data = {
+                ...this.requestData_ThongKeTangGiam,
+                capHocs: capHocs,
+                maDonVis: maDonVis,
+                maSo: null,
+                maTruongs: maTruongs,
+                namHoc: namHocs || currentYear
+            }
+            const response = await sendRequest(
+                Api.ioc.tongQuan.bieuDoDiemDanh,
+                request_Data,
+                request_Header
+            )
+            this.getDataBieuDoThongTinDiemDanh.dataBieuDoDuong_ThongTinDiemDanh =
+                response.item.listData
+            this.xaxisCategories.xaxis_categories_BieuDoDuong =
+                response.item.dsThang
+            console.log(this.xaxisCategories.xaxis_categories_BieuDoDuong)
         },
-
         handleESelectChange(source, ...selectedOptions) {
             switch (source) {
                 case 'ESelectUnitEducation':
@@ -348,60 +409,30 @@ export default {
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.7)'
                 })
-                const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
+                const maDonVis = this.customValueSelectedThongKeTangGiam(
                     this.selectedValue.selectedValueUnitEducation,
                     'selectedValueUnitEducation'
                 )
-                const capHocs_Update = this.customValueSelectedThongKeTangGiam(
+                const capHocs = this.customValueSelectedThongKeTangGiam(
                     this.selectedValue.selectedValueGradeLevel,
                     'selectedValueGradeLevel'
                 )
-                const maTruongs_Update = this.customValueSelectedThongKeTangGiam(
+                const maTruongs = this.customValueSelectedThongKeTangGiam(
                     this.selectedValue.selectedValueSchool,
                     'selectedValueSchool'
                 )
-                const namHoc_Update = this.selectedValue.selectedValueSchoolYear
-                // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
-                const requestData_ThongKeTangGiam_Update = {
-                    ...this.requestData_ThongKeTangGiam,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
+                const namHocs = this.selectedValue.selectedValueSchoolYear
+                const currentYear = new Date().getFullYear() - 1
+                const request_ThongKeTangGiam_Update = {
+                    capHocs: capHocs,
+                    maDonVis: maDonVis,
+                    maSo: null,
+                    maTruongs: maTruongs,
+                    namHoc: namHocs || currentYear
                 }
-
-                this.requestData_ThongKeTangGiam =
-                    requestData_ThongKeTangGiam_Update
-
-                // xử lý việc khi click thì sẽ lấy lại dữ liệu cho BieuDoTongQuan, BieuDoChatLuongDaoTao, BieuDoLoaiHinhDaoTao
-
-                const requestData_BieuDoThongTinDiemDanh = {
-                    ...this.requestData_BieuDoThongTinDiemDanh,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
-                }
-                const requesData_BieuDoPhoDiem_Update = {
-                    ...this.requesData_BieuDoPhoDiem,
-                    capHocs: capHocs_Update,
-                    maDonVis: maDonVis_Update,
-                    maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
-                }
-                this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
-
-                this.requestData_BieuDoThongTinDiemDanh =
-                    requestData_BieuDoThongTinDiemDanh
-
-                // Gọi lại hàm getDataThongKeTangGiam cho ba API khác nhau
-                await this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-                await this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-                await this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
-
-                await this.getDataBieuDoTron_ThongTinDiemDanh()
-                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
-
+                this.requestData_ThongKeTangGiam = request_ThongKeTangGiam_Update
+                await this.getDataThongKeTangGiam()
+                await this.getDataBieuDoDuong_DiemDanh()
                 setTimeout(() => {
                     loading.close()
                 }, 2000)
@@ -424,55 +455,6 @@ export default {
                         .split('')
                         .map(Number)
             }
-        },
-        async getDataBieuDoPhoDiemHocKyI_PhoDiem() {
-            this.requestHeaders = {
-                token: this.authToken
-            }
-            const currentYear = new Date().getFullYear()
-            this.requesData_BieuDoPhoDiem = {
-                ...this.requesData_BieuDoPhoDiem,
-                maSo: this.authUser.province,
-                hocKy: 1,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1,
-                type: null
-            }
-            const response = await sendRequest(
-                Api.bieuDoPhoDiem.bieuDoPhoDiemHocKy,
-                this.requesData_BieuDoPhoDiem,
-                this.requestHeaders
-            )
-
-            this.getDataBieuDoThongTinDiemDanh.dataBieuDoDuong_ThongTinDiemDanh =
-                response.item.listData
-        },
-        async customGetDataThongTinDiemDanh(apiEndpoint, dataKey, responseKey) {
-            this.requestHeaders = {
-                token: this.authToken
-            }
-            const currentYear = new Date().getFullYear()
-            this.requestData_BieuDoThongTinDiemDanh = {
-                ...this.requestData_BieuDoThongTinDiemDanh,
-                maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
-            }
-            const response = await sendRequest(
-                apiEndpoint,
-                this.requestData_BieuDoThongTinDiemDanh,
-                this.requestHeaders
-            )
-            switch (responseKey) {
-                case 'bieudoTron':
-                    this.getDataBieuDoThongTinDiemDanh[dataKey] =
-                        response.item.listValue
-                    break
-                case 'bieudoCot':
-                    this.getDataBieuDoThongTinDiemDanh[dataKey] =
-                        response.item.listData
-                    break
-            }
         }
     },
     computed: {
@@ -490,13 +472,8 @@ export default {
 
     mounted() {
         this.getDataChonTruonghoc()
-
-        this.getDataThongKeTangGiam(3, 'dataThongKeTruongHoc')
-        this.getDataThongKeTangGiam(2, 'dataThongKeGiaoVien')
-        this.getDataThongKeTangGiam(1, 'dataThongKeHocSinh')
-
-        this.getDataBieuDoTron_ThongTinDiemDanh()
-        this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+        this.getDataThongKeTangGiam()
+        this.getDataBieuDoDuong_DiemDanh()
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
         this.selectedValue.selectedValueSchoolYear = String(currentYear) - 1

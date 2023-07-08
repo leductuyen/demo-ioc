@@ -110,7 +110,13 @@
                         :content="'học sinh'"
                     />
                 </div>
-                <div class="col-md-3 col-sm-6"></div>
+                <div class="col-md-3 col-sm-6">
+                    <CustomStatistic
+                        :title="'Tổng số học sinh lên lớp'"
+                        :data="dataThongKeTangGiam.dataThongKeCount_HocSinhLenLop"
+                        :content="'học sinh'"
+                    />
+                </div>
             </div>
         </div>
 
@@ -267,7 +273,41 @@ export default {
             this.dataThongKeTangGiam.dataThongKeCount_HocSinh =
                 response.item.currentAmount
         },
-
+        async getDataCount_HocSinhLenLop() {
+            const maDonVis = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueUnitEducation,
+                'selectedValueUnitEducation'
+            )
+            const capHocs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueGradeLevel,
+                'selectedValueGradeLevel'
+            )
+            const maTruongs = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueSchool,
+                'selectedValueSchool'
+            )
+            const namHocs = this.selectedValue.selectedValueSchoolYear
+            this.requestHeaders = {
+                token: this.authToken
+            }
+            const currentYear = new Date().getFullYear() - 1
+            const request_Data = {
+                ...this.requestData_BieuDoHocSinh,
+                capHocs: capHocs,
+                maDonVis: maDonVis,
+                maTruongs: maTruongs,
+                maSo: this.authUser.province,
+                namHoc: namHocs || currentYear
+            }
+            const response = await sendRequest(
+                Api.ioc.tongQuan.tongSoHocSinhLenLop,
+                request_Data,
+                this.requestHeaders
+            )
+            this.dataThongKeTangGiam.dataThongKeCount_HocSinhLenLop =
+                response.item
+            console.log(response)
+        },
         async getDataBieuDoTongQuan_HocSinh() {
             await this.customGetDataBieuDoHocSinh(
                 Api.bieuDoHocSinh.bieuDoTongQuan,
@@ -371,7 +411,7 @@ export default {
                 this.requestData_BieuDoHocSinh = requestData_BieuDoHocSinh_Update
 
                 await this.getDataCount_HocSinh()
-
+                await this.getDataCount_HocSinhLenLop()
                 await this.getDataBieuDoTongQuan_HocSinh()
                 await this.getDataBieuDoTrangThai_HocSinh()
                 await this.getDataBieuDoGioiTinh_HocSinh()
@@ -453,7 +493,7 @@ export default {
     mounted() {
         this.getDataChonTruonghoc()
         this.getDataCount_HocSinh()
-
+        this.getDataCount_HocSinhLenLop()
         this.getDataBieuDoTongQuan_HocSinh()
         this.getDataBieuDoTrangThai_HocSinh()
         this.getDataBieuDoGioiTinh_HocSinh()

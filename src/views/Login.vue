@@ -8,30 +8,30 @@
                 <div class="loginbox">
                     <div class="img-logo">
                         <img
-                            src="./../assets/img/logo.png"
+                            src="./../assets/img/logoBig.png"
                             class="img-fluid"
                             alt="Logo"
                         />
                     </div>
-                    <h3>Login</h3>
+                    <h3>Đăng nhập</h3>
                     <p class="account-subtitle">
-                        login to your account to continue
+                        Đăng nhập vào tài khoản của bạn để tiếp tục
                     </p>
 
                     <CustomInput
-                        label="Enter UserName"
+                        label="Tài khoản"
                         v-model="login.input_username"
                         type="text"
                         error="error"
                     />
                     <CustomInput
-                        label="Enter Password"
+                        label="Mật khẩu"
                         v-model="login.input_password"
                         type="password"
                         error="error"
                     />
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-remember">
@@ -41,7 +41,7 @@
                                         v-model="login.input_remember"
                                     />
 
-                                    <label> Remember me </label>
+                                    <label> Ghi nhớ </label>
                                 </div>
                             </div>
 
@@ -49,25 +49,23 @@
                                 class="col-6 text-end"
                                 @click="navigateForgotPassword"
                             >
-                                <a class="forgot-link" href=""
-                                    >Forgot Password ?</a
-                                >
+                                <a class="forgot-link" href="">Quên mật khẩu ?</a>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div>
                         <CustomButton
-                            label="Login"
+                            label="Đăng nhập"
                             @click="handleLogin"
                             size="small"
                             type="primary"
                         />
                     </div>
-                    <div class="dont-have" @click="navigateSignUp">
+                    <!-- <div class="dont-have" @click="navigateSignUp">
                         Don't have an account?
                         <a href="">Sign up</a>
-                    </div>
-                    <div class="login-or">
+                    </div> -->
+                    <!-- <div class="login-or">
                         <span class="or-line"></span>
                         <p class="span-or">or login with</p>
                     </div>
@@ -91,7 +89,7 @@
                                 class="img-fluid"
                                 alt="Logo"
                         /></a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -151,13 +149,13 @@ export default {
             } catch (error) {
                 console.log(error)
             }
-        },
-        navigateForgotPassword() {
-            this.$router.push(Router.auth.forgotpassword)
-        },
-        navigateSignUp() {
-            this.$router.push(Router.auth.signup)
         }
+        // navigateForgotPassword() {
+        //     this.$router.push(Router.auth.forgotpassword)
+        // },
+        // navigateSignUp() {
+        //     this.$router.push(Router.auth.signup)
+        // }
     },
     mounted() {}
 }

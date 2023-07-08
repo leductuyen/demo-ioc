@@ -460,7 +460,6 @@ export default {
                 this.requestHeaders
             )
 
-            this.dataBanDo = response
             // this.getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc =
             //     response.item.listData
         },
@@ -722,6 +721,7 @@ export default {
                 await this.getDataThongKeTangGiam_TongSoTruongHoc()
                 await this.getDataThongKeTangGiam_TongSoGiaoVien()
                 await this.getDataThongKeTangGiam_TongSoHocSinh()
+                await this.layDuLieuBanDo()
                 await this.getDataBieuDoChatLuongDaoTao_TruongHoc()
 
                 await this.getDataBieuDoTrangThai_HocSinh()
@@ -729,7 +729,6 @@ export default {
                 await this.getDataBieuDoTrinhDoChinh_CBGVNV()
 
                 await this.getDataBieuDoDanhGiaHocSinh_HocLuc()
-                await this.layDuLieuBanDo()
 
                 loading.close()
             } catch (error) {

@@ -119,7 +119,7 @@
         </div>
         <div class="layout-card">
             <div class="row">
-                <div class="col-6 mb-4">
+                <div class="col-5 mb-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 mb-4">
+                <div class="col-7 mb-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
@@ -144,13 +144,11 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- <StackedColumnChart
-                                :data_StackedColumnChart="data_StackedColumnChart"
-                                :xaxis_categories="xaxisCategories.chiSoBMI"
-                            /> -->
                             <StackedColumnChartCustom
-                                :data_StackedColumnChart="data_StackedColumnChart"
-                                :xaxis_categories="xaxis_categories1"
+                                :data_StackedColumnChart="
+                                    getDataBieuDoThongTinYTeHocSinh.dataBieuDoCot_ThongTinYTeHocSinh
+                                "
+                                :xaxis_categories="xaxisCategories.sucKhoe"
                             />
                         </div>
                     </div>
@@ -166,14 +164,12 @@ import ESelect from '@/components/ESelect.vue'
 import ESelectYear from '@/components/ESelectYear.vue'
 import { mapState } from 'vuex'
 import CustomStatistic from '@/components/CustomStatistic.vue'
-import PieChartCustom from '@/components/PieChartCustom.vue'
-import StackedColumnChart from '@/components/StackedColumnChart.vue'
-import StackedColumnChartCustom from '@/components/StackedColumnChartCustom.vue'
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
 import { ESelectGradeLevel_MockData } from '@/mock_data/index'
 import ChangeTrackerItemCountTitle from '@/components/ChangeTrackerItemCountTitle.vue'
-
+import PieChartCustom from '@/components/PieChartCustom.vue'
+import StackedColumnChartCustom from '@/components/StackedColumnChartCustom.vue'
 import 'element-ui/lib/theme-chalk/index.css'
 
 export default {
@@ -186,23 +182,11 @@ export default {
         ChangeTrackerItemCountTitle,
         CustomTitle,
         PieChartCustom,
-        // StackedColumnChart
         StackedColumnChartCustom
+        // StackedColumnChart
     },
     data() {
         return {
-            data_StackedColumnChart: [
-                {
-                    name: 'Danh sách 1',
-                    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-                },
-                {
-                    name: 'Danh sách 2',
-                    data: [23, 41, 42, 69, 64, 74, 65, 86, 97]
-                }
-                // Thêm danh sách khác nếu cần
-            ],
-            xaxis_categories1: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
             xaxisCategories: {
                 chiSoBMI: [
                     'Bình thường',
@@ -214,7 +198,7 @@ export default {
                     'Nặng hơn tuổi',
                     'Cao hơn tuổi'
                 ],
-                loaiHopDong: ['Biết bơi', 'Có bệnh về mắt']
+                sucKhoe: ['Biết bơi', 'Có bệnh về mắt']
             },
             resetESelectSchool: false,
             requestHeaders: {
@@ -414,10 +398,17 @@ export default {
                 this.getDataBieuDoThongTinYTeHocSinh.dataBieuDoTron_ThongTinYTeHocSinh =
                     customDataBieuDoTron
 
-                const customDataBieuDoCot = response.item.bieuDoSucKhoe
+                const customDataBieuDoCot = response.item.bieuDoSucKhoe.map(
+                    (item) => {
+                        return {
+                            name: item.name,
+                            data: item.dataList
+                        }
+                    }
+                )
                 this.getDataBieuDoThongTinYTeHocSinh.dataBieuDoCot_ThongTinYTeHocSinh =
                     customDataBieuDoCot
-                console.log(customDataBieuDoCot)
+
                 loading.close()
             }
         },
@@ -539,10 +530,10 @@ export default {
 
     mounted() {
         this.getDataChonTruonghoc()
+
         this.getDataCount_HocSinh()
         this.getDataThongKe_HocSinh()
         this.getDataBieuDoYTe()
-
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
         this.selectedValue.selectedValueSchoolYear = String(currentYear) - 1
@@ -594,6 +585,15 @@ export default {
     background: white;
     border: #f2f3f8 2px solid;
     height: 300px;
+}
+@media (max-width: 768px) {
+    .layout-card .col-lg-5 {
+        width: 100%;
+    }
+    .layout-card .col-lg-3 {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 }
 /* CSS select dashboard */
 </style>

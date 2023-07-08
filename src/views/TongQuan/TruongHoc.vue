@@ -130,6 +130,7 @@
             :dataBieuDoLoaiHinhDaoTao_TruongHoc="
                 getDataBieuDoTruongHoc.dataBieuDoLoaiHinhDaoTao_TruongHoc
             "
+            :is-loading="isLoading"
         />
     </div>
 </template>
@@ -141,7 +142,6 @@ import ESelectYear from '@/components/ESelectYear.vue'
 import { mapState } from 'vuex'
 import CustomStatistic from '@/components/CustomStatistic.vue'
 import School from '../School.vue'
-
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
 import { ESelectGradeLevel_MockData } from '@/mock_data/index'
@@ -156,13 +156,13 @@ export default {
         CustomTitle,
         ESelect,
         ESelectYear,
-
         ChangeTrackerItemCountTitle,
         School,
         CustomStatistic
     },
     data() {
         return {
+            isLoading: true,
             resetESelectSchool: false,
             requestHeaders: {
                 'X-ROLE-ID': '',

@@ -301,6 +301,18 @@ const Api = {
             bieuDoYTe: {
                 method: METHOD.POST,
                 url: 'csdlgd-report-api/dasboard/bieuDoYte'
+            },
+            tongSoHocSinhLenLop: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/SoHocSinhLenLop'
+            },
+            thongTinDiemDanh: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/thongTinDiemDanh'
+            },
+            bieuDoDiemDanh: {
+                method: METHOD.POST,
+                url: 'csdlgd-report-api/dasboard/bieuDoDiemDanh'
             }
         },
         duBao: {

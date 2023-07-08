@@ -3,7 +3,10 @@
         <div class="test">
             <span>{{ title }}</span>
             <div class="layout-data">
-                <div class="data">{{ data }}</div>
+                <div class="data">
+                    {{ data }}<span v-if="data2" class="span">/</span>
+                    {{ data2 }}
+                </div>
                 <div class="content">{{ content }}</div>
             </div>
         </div>
@@ -21,6 +24,9 @@ export default {
         },
         content: {
             type: String
+        },
+        data2: {
+            type: Number
         }
     }
 }
@@ -41,14 +47,17 @@ export default {
     font-size: 18px !important;
 }
 .test span {
-    font-size: 13px !important;
+    font-size: 13px;
 }
 .layout-data {
     display: flex;
     align-items: center;
 }
+.layout-data .span {
+    font-size: 23px;
+}
 .data {
-    font-size: 24px;
+    font-size: 23px;
     font-weight: 700;
 }
 .content {
