@@ -911,10 +911,10 @@ export const mockData_BieuDoDashedLineChart = {
 }
 
 export const xaxisCategories_TongQuanChung = {
-    chatLuongDaoTao: ['C.Lượng ', 'Chuẩn mức 1', 'Chuẩn mức 2'],
+    chatLuongDaoTao: ['C.Lượng tối thiểu ', 'Chuẩn mức 1', 'Chuẩn mức 2'],
     loaiHinhDaoTao: ['Công lập', 'Tư thục', 'Dân lập'],
     trinhDoChinh: ['Tiến sĩ', 'Thạc sĩ', 'Đại học', 'Cao đẳng', 'Trung cấp'],
-    trangThai: ['Đang học', 'Chuyển trường'],
+    trangThai: ['Đang học', 'Chuyển trường','Bỏ học'],
     hocLuc: ['Giỏi', 'Khá', 'Trung bình', 'Yếu', 'Kém', 'Khác']
 }
 

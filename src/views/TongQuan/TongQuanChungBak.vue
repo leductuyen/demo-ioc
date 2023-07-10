@@ -119,12 +119,14 @@
     </div>
     <div class="layout-card">
       <div class="row">
-        <div class="col-md-6"
-             style="width: 100%;">
+        <div
+            class="col-md-6"
+            style="width: 100%; height: 80vh; overflow: scroll"
+        >
           <banDo :item="dataBanDo"/>
         </div>
         <div class="col-md-6">
-          <div class="row">
+          <div class="row mb-5">
             <div class="col-md-12 mb-3">
               <div class="card">
                 <div class="card-header">
@@ -134,7 +136,9 @@
                 </div>
                 <div class="card-body">
                   <StackedColumnChart
-                      :data_StackedColumnChart="getDataBieuDoTruongHoc.dataBieuDoChatLuongDaoTao_TruongHoc"
+                      :data_StackedColumnChart="
+                                            remapDataBanDo(getDataBieuDoTruongHoc.dataBieuDoChatLuongDaoTao_TruongHoc)
+                                        "
                       :xaxis_categories="
                                             xaxisCategories_TongQuanChung.chatLuongDaoTao
                                         "
@@ -161,7 +165,9 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-12 mb-3">
+          </div>
+          <div class="row mb-5">
+            <div class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-header">
                   <div class="title">
@@ -180,35 +186,40 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-header">
+                  <div class="title">Học sinh-Học lực</div>
+                </div>
+                <div class="card-body">
+                  <StackedColumnChart
+                      :data_StackedColumnChart="
+                                            getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc
+                                        "
+                      :xaxis_categories="
+                                            xaxisCategories_TongQuanChung.hocLuc
+                                        "
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row mt-4">
+      <div class="row">
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-header">
               <div class="title">
-                Trường học theo cấp
+                THỐNG KÊ TRƯỜNG HỌC - CHẤT LƯỢNG TỐI THIỂU
               </div>
             </div>
             <div class="card-body">
               <PieChart
-                  :label="xaxisCategories_TongQuanChung.hocLuc"
-                  :data_PieChart="getBieuDoHLHS(getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,'THCS')"/>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-header">
-              <div class="title">
-                Học Lực Học sinh thcs
-              </div>
-            </div>
-            <div class="card-body">
-              <PieChart
-                  :label="xaxisCategories_TongQuanChung.hocLuc"
-                  :data_PieChart="getBieuDoHLHS(getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,'THCS')"/>
+                  :data_PieChart="
+                                    getDataBieuDoTruongHoc.dataBieuDoChatLuongToiThieu
+                                "
+              />
             </div>
           </div>
         </div>
@@ -381,31 +392,16 @@ export default {
   },
 
   methods: {
-    getBieuDoHLHS(data,capHoc){
-      let result =  [0,0,0,0,0,0]
-      console.log('Data map biểu đồ học lực học sinh:')
-      console.log(data)
-      if(data){
-        for (let i = 0; i < data.length; i++) {
-          if(data[i].name==capHoc){
-            result = data[i].data
-          }
-        }
-      }
-      console.log('Dữ liệu là:')
-      console.log(result)
-      return result
-    },
     remapDataBanDo(data) {
       console.log('remapDataBanDo')
       console.log(data)
-      let result = [
-        {name: '', data: [1, 2, 3]}
+      let result  = [
+        {name:'',data:[1,2,3]}
       ];
       let pt1 = 0;
       let pt2 = 0;
       let pt3 = 0;
-      if (data && data.length) {
+      if(data&&data.length){
         for (let i = 0; i < data.length; i++) {
           console.error(data[i])
           pt1 += data[i].data[0];
@@ -415,8 +411,8 @@ export default {
         console.log(pt1)
         console.log(pt2)
         console.log(pt3)
-        result = [
-          {name: '', data: [pt1, pt2, pt3]}
+        result  = [
+          {name:'',data:[pt1,pt2,pt3]}
         ];
       }
       return result

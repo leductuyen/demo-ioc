@@ -120,7 +120,7 @@ export default {
 .layout-data {
     display: flex;
     font-size: 14px;
-    color: black;
+    //color: black;
 }
 .layout-data .data {
     margin-right: 10px;
