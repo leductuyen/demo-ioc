@@ -206,10 +206,61 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">
+                                THỐNG KÊ TRƯỜNG HỌC - CHẤT LƯỢNG TỐI THIỂU
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <PieChart
+                                :data_PieChart="
+                                    getDataBieuDoTruongHoc.dataBieuDoChatLuongToiThieu
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">
+                                THỐNG KÊ TRƯỜNG HỌC - CHUẨN MỨC 1
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <PieChart
+                                :data_PieChart="
+                                    getDataBieuDoTruongHoc.dataBieuDoChuanMuc1
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">
+                                THỐNG KÊ TRƯỜNG HỌC - CHUẨN MỨC 2
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <PieChart
+                                :data_PieChart="
+                                    getDataBieuDoTruongHoc.dataBieuDoChuanMuc2
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+import PieChart from '@/components/PieChart.vue'
 import store from '@/store'
 import CustomButton from '@/components/CustomButton.vue'
 import CustomStatistic from '@/components/CustomStatistic.vue'
@@ -239,7 +290,7 @@ export default {
         CustomStatistic,
         ChangeTrackerItemCountTitle,
         StackedColumnChart,
-
+        PieChart,
         CustomTitle
     },
     data() {
@@ -323,7 +374,10 @@ export default {
                 dataThongKeTongSo_HocSinh: null
             },
             getDataBieuDoTruongHoc: {
-                dataBieuDoChatLuongDaoTao_TruongHoc: []
+                dataBieuDoChatLuongDaoTao_TruongHoc: [],
+                dataBieuDoChatLuongToiThieu: [],
+                dataBieuDoChuanMuc1: [],
+                dataBieuDoChuanMuc2: []
             },
             getDataBieuDoHocSinh: {
                 dataBieuDoTrangThai_HocSinh: []
@@ -459,13 +513,13 @@ export default {
                 this.requesData_BieuDoPhoDiem,
                 this.requestHeaders
             )
-          this.dataBanDo = response;
-          console.log('DataBanDo:')
-          console.log(this.dataBanDo)
+            this.dataBanDo = response
+            console.log('DataBanDo:')
+            console.log(this.dataBanDo)
         },
         async getDataBieuDoDanhGiaHocSinh_HocLuc() {
             this.requestHeaders = {
-                token: this.authToken,
+                token: this.authToken
             }
             const currentYear = new Date().getFullYear()
             this.requesData_BieuDoPhoDiem = {
@@ -534,6 +588,13 @@ export default {
                     this.getDataBieuDoHocSinh[dataKey] = response.item.listData
                     break
             }
+
+            this.getDataBieuDoTruongHoc.dataBieuDoChatLuongToiThieu =
+                response.item.listDataTron[0].data
+            this.getDataBieuDoTruongHoc.dataBieuDoChuanMuc1 =
+                response.item.listDataTron[1].data
+            this.getDataBieuDoTruongHoc.dataBieuDoChuanMuc2 =
+                response.item.listDataTron[2].data
         },
         async customGetDataCanBoGiaoVienNhanVien(
             apiEndpoint,

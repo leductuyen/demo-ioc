@@ -10,7 +10,7 @@ const sendRequest = async (api, data, headers, params, ...rest) => {
         data: data || {},
         headers: headers || {},
         params: params || {},
-        ...rest,
+        ...rest
     }
     // console.log('axios', axiosConfig)
 
