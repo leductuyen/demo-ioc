@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CustomTitle :title="'Dashboard Dự báo số lượng Giáo viên'" />
+        <CustomTitle :title="'Dự báo số lượng Giáo viên'" />
         <div class="select-dashboard">
             <div class="row">
                 <div class="col-md-4 col-12">

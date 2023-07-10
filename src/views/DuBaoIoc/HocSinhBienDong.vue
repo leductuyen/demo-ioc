@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CustomTitle :title="'Dashboard Học sinh biến động'" />
+        <CustomTitle :title="'Dự báo Học sinh biến động'" />
         <div class="select-dashboard">
             <div class="row">
                 <div class="col-md-4 col-12">

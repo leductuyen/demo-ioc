@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CustomTitle :title="'Dashboard Kết quả học tập của học sinh'" />
+        <CustomTitle :title="'Dụ báo Kết quả học tập của học sinh'" />
         <div class="select-dashboard">
             <div class="row">
                 <div class="col-md-4 col-12">
