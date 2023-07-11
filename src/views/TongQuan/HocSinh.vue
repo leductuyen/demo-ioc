@@ -200,7 +200,22 @@ export default {
             },
 
             selectedValue: {
-                selectedValueUnitEducation: [], //chondonvi
+                selectedValueUnitEducation: [{
+                  "value": "080",
+                  "title": "Phòng Giáo dục và Đào tạo Thành phố Lào Cai"
+                }, {"value": "082", "title": "Phòng Giáo dục và Đào tạo Huyện Bát Xát"}, {
+                  "value": "083",
+                  "title": "Phòng Giáo dục và Đào tạo Huyện Mường Khương"
+                }, {"value": "084", "title": "Phòng Giáo dục và Đào tạo Huyện Si Ma Cai"}, {
+                  "value": "085",
+                  "title": "Phòng Giáo dục và Đào tạo Huyện Bắc Hà"
+                }, {"value": "086", "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Thắng"}, {
+                  "value": "087",
+                  "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Yên"
+                }, {"value": "088", "title": "Phòng Giáo dục và Đào tạo Huyện Sa Pa"}, {
+                  "value": "089",
+                  "title": "Phòng Giáo dục và Đào tạo Huyện Văn Bàn"
+                }, {"value": "10", "title": "Sở Giáo dục và Đào tạo Tỉnh Lào Cai"}], //chondonvi
                 selectedValueGradeLevel: [], // choncaphoc
                 selectedValueSchool: [], //chontruonghoc
                 selectedValueSchoolYear: null //chonnamhoc
@@ -257,7 +272,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 1
+            const currentYear = new Date().getFullYear() - 2
 
             this.requestData_ThongKeTangGiam = {
                 ...this.requestData_ThongKeTangGiam,
@@ -290,7 +305,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 1
+            const currentYear = new Date().getFullYear() - 2
             const request_Data = {
                 ...this.requestData_BieuDoHocSinh,
                 capHocs: capHocs,
@@ -502,7 +517,8 @@ export default {
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
-        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 1
+        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 2
+      this.handleThongKe()
     }
 }
 </script>

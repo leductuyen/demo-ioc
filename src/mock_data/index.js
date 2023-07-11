@@ -769,40 +769,40 @@ export const permission_ioc = [
             }
         ]
     },
-    {
-        checked: true,
-        name: 'Báo cáo',
-        path: '/report',
-        hasChildren: true,
-        icon: 'el-icon-edit-outline',
-        children: [
-            {
-                checked: true,
-                name: 'Báo cáo EMIS',
-                path: '/Report-to-the-ministry'
-            },
-            {
-                checked: true,
-                name: 'Báo cáo đơn vị',
-                path: '/Report-to-the-department'
-            },
-            {
-                checked: true,
-                name: 'Báo cáo động',
-                path: '/report-emis'
-            },
-            {
-                checked: true,
-                name: 'Báo cáo EQMS',
-                path: '/Report-eqms'
-            },
-            {
-                checked: true,
-                name: 'Nộp thống kê theo biểu mẫu',
-                path: '/Submit_statistical_sample'
-            }
-        ]
-    }
+    // {
+    //     checked: true,
+    //     name: 'Báo cáo',
+    //     path: '/report',
+    //     hasChildren: true,
+    //     icon: 'el-icon-edit-outline',
+    //     children: [
+    //         {
+    //             checked: true,
+    //             name: 'Báo cáo EMIS',
+    //             path: '/Report-to-the-ministry'
+    //         },
+    //         {
+    //             checked: true,
+    //             name: 'Báo cáo đơn vị',
+    //             path: '/Report-to-the-department'
+    //         },
+    //         {
+    //             checked: true,
+    //             name: 'Báo cáo động',
+    //             path: '/report-emis'
+    //         },
+    //         {
+    //             checked: true,
+    //             name: 'Báo cáo EQMS',
+    //             path: '/Report-eqms'
+    //         },
+    //         {
+    //             checked: true,
+    //             name: 'Nộp thống kê theo biểu mẫu',
+    //             path: '/Submit_statistical_sample'
+    //         }
+    //     ]
+    // }
 ]
 
 export const dataBaoCaoEQMS_1_MockData = {
@@ -915,7 +915,7 @@ export const xaxisCategories_TongQuanChung = {
     loaiHinhDaoTao: ['Công lập', 'Tư thục', 'Dân lập'],
     trinhDoChinh: ['Tiến sĩ', 'Thạc sĩ', 'Đại học', 'Cao đẳng', 'Trung cấp'],
     trangThai: ['Đang học', 'Chuyển trường','Bỏ học'],
-    hocLuc: ['Giỏi', 'Khá', 'Trung bình', 'Yếu', 'Kém', 'Khác']
+    hocLuc: ['Giỏi', 'Khá', 'Trung bình', 'Yếu', 'Kém', 'Khác'],
 }
 
 const total = [

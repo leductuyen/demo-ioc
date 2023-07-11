@@ -23,6 +23,7 @@
                         </div>
                         <div class="card-body">
                             <PieChart
+                                :label="labelSoLuongTruong"
                                 :data_PieChart="dataBieuDoTongQuan_HocSinh"
                             />
                         </div>
@@ -110,6 +111,16 @@ export default {
     },
     data() {
         return {
+          labelSoLuongTruong: [
+            'Mầm non',
+            'Tiểu học',
+            'THCS',
+            'THPT',
+            'Liên cấp',
+            'GDTX',
+            'Liên cấp 2+3',
+            'Khác'
+          ],
             xaxisCategories: {
                 trangThai: ['Đang học', 'Chuyển trường'],
                 gioiTinh: ['Nam', 'Nữ'],

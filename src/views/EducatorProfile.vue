@@ -21,6 +21,7 @@
                         </div>
                         <div class="card-body">
                             <PieChart
+                                :label="labelSoLuongTruong"
                                 :data_PieChart="dataBieuDoTongQuan_CBGVNV"
                             />
                         </div>
@@ -122,6 +123,16 @@ export default {
     },
     data() {
         return {
+          labelSoLuongTruong: [
+            'Mầm non',
+            'Tiểu học',
+            'THCS',
+            'THPT',
+            'Liên cấp',
+            'GDTX',
+            'Liên cấp 2+3',
+            'Khác'
+          ],
             xaxisCategories: {
                 trinhDoChinh: [
                     'Tiến sĩ',

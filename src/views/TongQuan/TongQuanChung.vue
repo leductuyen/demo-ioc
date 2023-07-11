@@ -193,8 +193,8 @@
             </div>
             <div class="card-body">
               <PieChart
-                  :label="xaxisCategories_TongQuanChung.hocLuc"
-                  :data_PieChart="getBieuDoHLHS(getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,'THCS')"/>
+                  :label="labelSoLuongTruong"
+                  :data_PieChart="getDataBieuDoTruongHoc.dataBieuDoTongQuan_TruongHoc"/>
             </div>
           </div>
         </div>
@@ -216,31 +216,13 @@
           <div class="card">
             <div class="card-header">
               <div class="title">
-                THỐNG KÊ TRƯỜNG HỌC - CHUẨN MỨC 1
+                Học Lực Học sinh thpt
               </div>
             </div>
             <div class="card-body">
               <PieChart
-                  :data_PieChart="
-                                    getDataBieuDoTruongHoc.dataBieuDoChuanMuc1
-                                "
-              />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-header">
-              <div class="title">
-                THỐNG KÊ TRƯỜNG HỌC - CHUẨN MỨC 2
-              </div>
-            </div>
-            <div class="card-body">
-              <PieChart
-                  :data_PieChart="
-                                    getDataBieuDoTruongHoc.dataBieuDoChuanMuc2
-                                "
-              />
+                  :label="xaxisCategories_TongQuanChung.hocLuc"
+                  :data_PieChart="getBieuDoHLHS(getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,'THPT')"/>
             </div>
           </div>
         </div>
@@ -285,6 +267,17 @@ export default {
   data() {
     return {
       dataBanDo: {},
+
+      labelSoLuongTruong: [
+        'Mầm non',
+        'Tiểu học',
+        'THCS',
+        'THPT',
+        'Liên cấp',
+        'GDTX',
+        'Liên cấp 2+3',
+        'Khác'
+      ],
       mockData_BieuDoDashedLineChart: mockData_BieuDoDashedLineChart,
       xaxisCategories_TongQuanChung: xaxisCategories_TongQuanChung,
       resetESelectSchool: false,
@@ -352,7 +345,22 @@ export default {
       },
 
       selectedValue: {
-        selectedValueUnitEducation: [], //chondonvi
+        selectedValueUnitEducation: [{
+          "value": "080",
+          "title": "Phòng Giáo dục và Đào tạo Thành phố Lào Cai"
+        }, {"value": "082", "title": "Phòng Giáo dục và Đào tạo Huyện Bát Xát"}, {
+          "value": "083",
+          "title": "Phòng Giáo dục và Đào tạo Huyện Mường Khương"
+        }, {"value": "084", "title": "Phòng Giáo dục và Đào tạo Huyện Si Ma Cai"}, {
+          "value": "085",
+          "title": "Phòng Giáo dục và Đào tạo Huyện Bắc Hà"
+        }, {"value": "086", "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Thắng"}, {
+          "value": "087",
+          "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Yên"
+        }, {"value": "088", "title": "Phòng Giáo dục và Đào tạo Huyện Sa Pa"}, {
+          "value": "089",
+          "title": "Phòng Giáo dục và Đào tạo Huyện Văn Bàn"
+        }, {"value": "10", "title": "Sở Giáo dục và Đào tạo Tỉnh Lào Cai"}], //chondonvi
         selectedValueGradeLevel: [], // choncaphoc
         selectedValueSchool: [], //chontruonghoc
         selectedValueSchoolYear: null //chonnamhoc
@@ -366,7 +374,8 @@ export default {
         dataBieuDoChatLuongDaoTao_TruongHoc: [],
         dataBieuDoChatLuongToiThieu: [],
         dataBieuDoChuanMuc1: [],
-        dataBieuDoChuanMuc2: []
+        dataBieuDoChuanMuc2: [],
+        dataBieuDoTongQuan_TruongHoc: [0, 0, 0, 0, 0, 0, 0, 0],
       },
       getDataBieuDoHocSinh: {
         dataBieuDoTrangThai_HocSinh: []
@@ -381,13 +390,20 @@ export default {
   },
 
   methods: {
-    getBieuDoHLHS(data,capHoc){
-      let result =  [0,0,0,0,0,0]
+    async getDataBieuDoTongQuan_TrongHoc() {
+      await this.customGetDataBieuDoTruongHoc(
+          Api.bieuDoTruongHoc.bieuDoTongQuan,
+          'dataBieuDoTongQuan_TruongHoc',
+          'bieudoTron'
+      )
+    },
+    getBieuDoHLHS(data, capHoc) {
+      let result = [0, 0, 0, 0, 0, 0]
       console.log('Data map biểu đồ học lực học sinh:')
       console.log(data)
-      if(data){
+      if (data) {
         for (let i = 0; i < data.length; i++) {
-          if(data[i].name==capHoc){
+          if (data[i].name == capHoc) {
             result = data[i].data
           }
         }
@@ -565,8 +581,8 @@ export default {
       this.getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc =
           response.item.listData
     },
-
     async customGetDataBieuDoTruongHoc(apiEndpoint, dataKey, responseKey) {
+      console.log('customGetDataBieuDoTruongHoc')
       this.requestHeaders = {
         token: this.authToken
       }
@@ -594,6 +610,8 @@ export default {
           this.getDataBieuDoTruongHoc[dataKey] = response.item.listData
           break
       }
+      console.log('Biểu đồ trường:')
+      console.log(this.getDataBieuDoTruongHoc.dataBieuDoTongQuan_TruongHoc)
     },
     async customGetDataBieuDoHocSinh(apiEndpoint, dataKey, responseKey) {
       this.requestHeaders = {
@@ -677,7 +695,7 @@ export default {
       this.requestHeaders = {
         token: this.authToken
       }
-      const currentYear = new Date().getFullYear() - 1
+      const currentYear = new Date().getFullYear() - 2
 
       this.requestData_ThongKeTangGiam = {
         ...this.requestData_ThongKeTangGiam,
@@ -697,7 +715,7 @@ export default {
       this.requestHeaders = {
         token: this.authToken
       }
-      const currentYear = new Date().getFullYear() - 1
+      const currentYear = new Date().getFullYear() - 2
 
       this.requestData_ThongKeTangGiam = {
         ...this.requestData_ThongKeTangGiam,
@@ -821,6 +839,7 @@ export default {
         await this.getDataBieuDoTrinhDoChinh_CBGVNV()
 
         await this.getDataBieuDoDanhGiaHocSinh_HocLuc()
+        this.getDataBieuDoTongQuan_TrongHoc()
 
         loading.close()
       } catch (error) {
@@ -873,7 +892,7 @@ export default {
     // giá trị mặc định của chọn năm học
     const currentYear = new Date().getFullYear() - 2
     this.selectedValue.selectedValueSchoolYear = String(currentYear)
-    // this.handleThongKe()
+    this.handleThongKe()
   }
 }
 </script>

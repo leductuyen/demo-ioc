@@ -192,7 +192,7 @@ export default {
             url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             attribution:
                 '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            zoom: 8,
+            zoom: 9.5,
             tileProviders: [
                 {
                     name: 'Mặc định',
@@ -230,7 +230,7 @@ export default {
                     attribution: 'Hệ thống IOC CSDL Ngành Giáo dục'
                 }
             ],
-            center: [22.41557270752495, 103.99149927938855],
+            center: [22.311075060526896, 104.10620129208274],
             thongTinBanDo: {
                 soLuongCanBoGiaoVien: '',
                 soLuongCanBoGiaoVienNam: '',

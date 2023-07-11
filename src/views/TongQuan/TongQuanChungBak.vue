@@ -673,7 +673,7 @@ export default {
       this.requestHeaders = {
         token: this.authToken
       }
-      const currentYear = new Date().getFullYear() - 1
+      const currentYear = new Date().getFullYear() - 2
 
       this.requestData_ThongKeTangGiam = {
         ...this.requestData_ThongKeTangGiam,
@@ -693,7 +693,7 @@ export default {
       this.requestHeaders = {
         token: this.authToken
       }
-      const currentYear = new Date().getFullYear() - 1
+      const currentYear = new Date().getFullYear() - 2
 
       this.requestData_ThongKeTangGiam = {
         ...this.requestData_ThongKeTangGiam,
