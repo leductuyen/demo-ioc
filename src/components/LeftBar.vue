@@ -16,7 +16,7 @@
             class="el-menu-vertical-demo"
             background-color="#fff"
             text-color="#131523"
-            active-text-color="#0CE0FF"
+            active-text-color="#FF0000"
             :collapse="isCollapseLeftBar"
         >
             <template v-for="item in permission">
