@@ -136,77 +136,45 @@
             :dataBieuDoKhuVuc_HocSinh="
                 getDataBieuDoHocSinh.dataBieuDoKhuVuc_HocSinh
             "
+            :dataBieuDohocSinh_HocLuc="
+                getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc
+            "
         />
-        <div class="row mt-4">
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="title">Phổ điểm học kỳ I</div>
-                    </div>
-                    <div class="card-body">
-                        <LineChart
-                            :data_LineChart="
-                                getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem
-                            "
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="title">Phổ điểm học kỳ II</div>
-                    </div>
-                    <div class="card-body">
-                        <LineChart
-                            :data_LineChart="
-                                getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKII_PhoDiem
-                            "
-                        />
+        <div class="layout-card">
+            <div class="row">
+                <div class="col-md-6 mb-6 mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">Phổ điểm học kỳ I</div>
+                        </div>
+                        <div class="card-body">
+                            <LineChart
+                                :data_LineChart="
+                                    getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem
+                                "
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <div class="title">Học Lực Học sinh thcs</div>
-                </div>
-                <div class="card-body">
-                    <PieChart
-                        :label="xaxisCategories_TongQuanChung.hocLuc"
-                        :data_PieChart="
-                            getBieuDoHLHS(
-                                getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,
-                                'THCS'
-                            )
-                        "
-                    />
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-header">
-                    <div class="title">Học Lực Học sinh thpt</div>
-                </div>
-                <div class="card-body">
-                    <!-- <PieChart
-                        :label="xaxisCategories_TongQuanChung.hocLuc"
-                        :data_PieChart="
-                            getBieuDoHLHS(
-                                getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,
-                                'THPT'
-                            )
-                        "
-                    /> -->
+                <div class="col-md-6 mb-6 mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">Phổ điểm học kỳ II</div>
+                        </div>
+                        <div class="card-body">
+                            <LineChart
+                                :data_LineChart="
+                                    getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKII_PhoDiem
+                                "
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import PieChart from '@/components/PieChart.vue'
 import LineChart from '@/components/LineChart.vue'
 import CustomTitle from '@/components/CustomTitle.vue'
 import CustomButton from '@/components/CustomButton.vue'
@@ -235,12 +203,10 @@ export default {
         ESelectYear,
         CustomStatistic,
         ChangeTrackerItemCountTitle,
-        LineChart,
-        PieChart
+        LineChart
     },
     data() {
         return {
-            xaxisCategories_TongQuanChung: xaxisCategories_TongQuanChung,
             resetESelectSchool: false,
             requestHeaders: {
                 'X-ROLE-ID': '',
@@ -640,21 +606,6 @@ export default {
             }
         },
 
-        getBieuDoHLHS(data, capHoc) {
-            let result = [0, 0, 0, 0, 0, 0]
-            // console.log('Data map biểu đồ học lực học sinh:')
-            // console.log(data)
-            if (data) {
-                for (let i = 0; i < data.length; i++) {
-                    if (data[i].name == capHoc) {
-                        result = data[i].data
-                    }
-                }
-            }
-            // console.log('Dữ liệu là:')
-            // console.log(result)
-            return result
-        },
         async customGetDataBieuDoHocSinh(apiEndpoint, dataKey, responseKey) {
             this.requestHeaders = {
                 token: this.authToken
@@ -746,7 +697,11 @@ export default {
 }
 
 .layout-card {
-    padding: 0px 10px 20px 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 15px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 .layout-card .card-header {
     background: #f2f3f8;

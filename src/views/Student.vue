@@ -29,21 +29,42 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-header">
-                            <div class="title">Trạng thái</div>
+                            <div class="title">Học Lực Học sinh thcs</div>
                         </div>
                         <div class="card-body">
-                            <StackedColumnChart
-                                :data_StackedColumnChart="
-                                    dataBieuDoTrangThai_HocSinh
+                            <PieChart
+                                :label="xaxisCategories_TongQuanChung.hocLuc"
+                                :data_PieChart="
+                                    getBieuDoHLHS(
+                                        dataBieuDohocSinh_HocLuc,
+                                        'THCS'
+                                    )
                                 "
-                                :xaxis_categories="xaxisCategories.trangThai"
                             />
                         </div>
                     </div>
-                </div> -->
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">Học Lực Học sinh thpt</div>
+                        </div>
+                        <div class="card-body">
+                            <PieChart
+                                :label="xaxisCategories_TongQuanChung.hocLuc"
+                                :data_PieChart="
+                                    getBieuDoHLHS(
+                                        dataBieuDohocSinh_HocLuc,
+                                        'THPT'
+                                    )
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-header">
@@ -99,6 +120,10 @@
 import CustomButton from '@/components/CustomButton.vue'
 import PieChart from '@/components/PieChart.vue'
 import StackedColumnChart from '@/components/StackedColumnChart.vue'
+import {
+    ESelectGradeLevel_MockData,
+    xaxisCategories_TongQuanChung
+} from '@/mock_data'
 import { Icon } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 export default {
@@ -111,22 +136,40 @@ export default {
     },
     data() {
         return {
-          labelSoLuongTruong: [
-            'Mầm non',
-            'Tiểu học',
-            'THCS',
-            'THPT',
-            'Liên cấp',
-            'GDTX',
-            'Liên cấp 2+3',
-            'Khác'
-          ],
+            xaxisCategories_TongQuanChung: xaxisCategories_TongQuanChung,
+            labelSoLuongTruong: [
+                'Mầm non',
+                'Tiểu học',
+                'THCS',
+                'THPT',
+                'Liên cấp',
+                'GDTX',
+                'Liên cấp 2+3',
+                'Khác'
+            ],
             xaxisCategories: {
                 trangThai: ['Đang học', 'Chuyển trường'],
                 gioiTinh: ['Nam', 'Nữ'],
                 loaiHinhDaoTao: ['Công lập', 'Tư Thục', 'Dân lập'],
                 khuVuc: ['B.Giới-H.Đảo', 'Đô thị', 'Đồng bằng', 'M.Núi-V.Sâu']
             }
+        }
+    },
+    methods: {
+        getBieuDoHLHS(data, capHoc) {
+            let result = [0, 0, 0, 0, 0, 0]
+            // console.log('Data map biểu đồ học lực học sinh:')
+            // console.log(data)
+            if (data) {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].name == capHoc) {
+                        result = data[i].data
+                    }
+                }
+            }
+            // console.log('Dữ liệu là:')
+            // console.log(result)
+            return result
         }
     },
     props: {
@@ -147,6 +190,10 @@ export default {
             required: true
         },
         dataBieuDoKhuVuc_HocSinh: {
+            type: Array,
+            required: true
+        },
+        dataBieuDohocSinh_HocLuc: {
             type: Array,
             required: true
         }
