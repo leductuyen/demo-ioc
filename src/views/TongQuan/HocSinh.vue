@@ -137,9 +137,77 @@
                 getDataBieuDoHocSinh.dataBieuDoKhuVuc_HocSinh
             "
         />
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="title">Phổ điểm học kỳ I</div>
+                    </div>
+                    <div class="card-body">
+                        <LineChart
+                            :data_LineChart="
+                                getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem
+                            "
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="title">Phổ điểm học kỳ II</div>
+                    </div>
+                    <div class="card-body">
+                        <LineChart
+                            :data_LineChart="
+                                getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKII_PhoDiem
+                            "
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title">Học Lực Học sinh thcs</div>
+                </div>
+                <div class="card-body">
+                    <PieChart
+                        :label="xaxisCategories_TongQuanChung.hocLuc"
+                        :data_PieChart="
+                            getBieuDoHLHS(
+                                getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,
+                                'THCS'
+                            )
+                        "
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="title">Học Lực Học sinh thpt</div>
+                </div>
+                <div class="card-body">
+                    <!-- <PieChart
+                        :label="xaxisCategories_TongQuanChung.hocLuc"
+                        :data_PieChart="
+                            getBieuDoHLHS(
+                                getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc,
+                                'THPT'
+                            )
+                        "
+                    /> -->
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+import PieChart from '@/components/PieChart.vue'
+import LineChart from '@/components/LineChart.vue'
 import CustomTitle from '@/components/CustomTitle.vue'
 import CustomButton from '@/components/CustomButton.vue'
 import CustomStatistic from '@/components/CustomStatistic.vue'
@@ -149,7 +217,10 @@ import { mapState } from 'vuex'
 import Student from '../Student.vue'
 import sendRequest from '@/services'
 import Api from '@/constants/Api'
-import { ESelectGradeLevel_MockData } from '@/mock_data/index'
+import {
+    ESelectGradeLevel_MockData,
+    xaxisCategories_TongQuanChung
+} from '@/mock_data'
 import ChangeTrackerItemCountTitle from '@/components/ChangeTrackerItemCountTitle.vue'
 
 import 'element-ui/lib/theme-chalk/index.css'
@@ -163,10 +234,13 @@ export default {
         ESelect,
         ESelectYear,
         CustomStatistic,
-        ChangeTrackerItemCountTitle
+        ChangeTrackerItemCountTitle,
+        LineChart,
+        PieChart
     },
     data() {
         return {
+            xaxisCategories_TongQuanChung: xaxisCategories_TongQuanChung,
             resetESelectSchool: false,
             requestHeaders: {
                 'X-ROLE-ID': '',
@@ -200,22 +274,45 @@ export default {
             },
 
             selectedValue: {
-                selectedValueUnitEducation: [{
-                  "value": "080",
-                  "title": "Phòng Giáo dục và Đào tạo Thành phố Lào Cai"
-                }, {"value": "082", "title": "Phòng Giáo dục và Đào tạo Huyện Bát Xát"}, {
-                  "value": "083",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Mường Khương"
-                }, {"value": "084", "title": "Phòng Giáo dục và Đào tạo Huyện Si Ma Cai"}, {
-                  "value": "085",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Bắc Hà"
-                }, {"value": "086", "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Thắng"}, {
-                  "value": "087",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Yên"
-                }, {"value": "088", "title": "Phòng Giáo dục và Đào tạo Huyện Sa Pa"}, {
-                  "value": "089",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Văn Bàn"
-                }, {"value": "10", "title": "Sở Giáo dục và Đào tạo Tỉnh Lào Cai"}], //chondonvi
+                selectedValueUnitEducation: [
+                    {
+                        value: '080',
+                        title: 'Phòng Giáo dục và Đào tạo Thành phố Lào Cai'
+                    },
+                    {
+                        value: '082',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bát Xát'
+                    },
+                    {
+                        value: '083',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Mường Khương'
+                    },
+                    {
+                        value: '084',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Si Ma Cai'
+                    },
+                    {
+                        value: '085',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bắc Hà'
+                    },
+                    {
+                        value: '086',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bảo Thắng'
+                    },
+                    {
+                        value: '087',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bảo Yên'
+                    },
+                    {
+                        value: '088',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Sa Pa'
+                    },
+                    {
+                        value: '089',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Văn Bàn'
+                    },
+                    { value: '10', title: 'Sở Giáo dục và Đào tạo Tỉnh Lào Cai' }
+                ], //chondonvi
                 selectedValueGradeLevel: [], // choncaphoc
                 selectedValueSchool: [], //chontruonghoc
                 selectedValueSchoolYear: null //chonnamhoc
@@ -232,6 +329,20 @@ export default {
                 dataBieuDoGioiTinh_HocSinh: [],
                 dataBieuDoLoaiHinhDaoTao_HocSinh: [],
                 dataBieuDoKhuVuc_HocSinh: []
+            },
+            requesData_BieuDoPhoDiem: {
+                capHocs: [],
+                maDonVis: [],
+                maSo: null,
+                maTruongs: [],
+                namHoc: null
+            },
+            getDataBieuDoPhoDiem: {
+                dataBieuDoPhoDiemHKI_PhoDiem: [],
+                dataBieuDoPhoDiemHKII_PhoDiem: []
+            },
+            getDataBieuDoHocSinh_HocLuc: {
+                dataBieuDohocSinh_HocLuc: []
             }
         }
     },
@@ -242,6 +353,69 @@ export default {
         },
         //callAPi
 
+        async getDataBieuDoDanhGiaHocSinh_HocLuc() {
+            this.requestHeaders = {
+                token: this.authToken
+            }
+            const currentYear = new Date().getFullYear()
+            this.requesData_BieuDoPhoDiem = {
+                ...this.requesData_BieuDoPhoDiem,
+                maSo: this.authUser.province,
+                hocKy: 3,
+                namHoc:
+                    this.selectedValue.selectedValueSchoolYear || currentYear - 2
+            }
+            const response = await sendRequest(
+                Api.bieuDoPhoDiem.bieuDoDanhGiaHocSinh,
+                this.requesData_BieuDoPhoDiem,
+                this.requestHeaders
+            )
+            this.getDataBieuDoHocSinh_HocLuc.dataBieuDohocSinh_HocLuc =
+                response.item.listData
+            console.log(response)
+        },
+        async getDataBieuDoPhoDiemHocKyI_PhoDiem() {
+            const requestHeaders = {
+                token: this.authToken
+            }
+            const currentYear = new Date().getFullYear()
+            this.requesData_BieuDoPhoDiem = {
+                ...this.requesData_BieuDoPhoDiem,
+                maSo: this.authUser.province,
+                hocKy: 1,
+                namHoc:
+                    this.selectedValue.selectedValueSchoolYear || currentYear - 2,
+                type: null
+            }
+            const response = await sendRequest(
+                Api.bieuDoPhoDiem.bieuDoPhoDiemHocKy,
+                this.requesData_BieuDoPhoDiem,
+                requestHeaders
+            )
+            this.getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKI_PhoDiem =
+                response.item.listData
+        },
+        async getDataBieuDoPhoDiemHocKyII_PhoDiem() {
+            this.requestHeaders = {
+                token: this.authToken
+            }
+            const currentYear = new Date().getFullYear()
+            this.requesData_BieuDoPhoDiem = {
+                ...this.requesData_BieuDoPhoDiem,
+                maSo: this.authUser.province,
+                hocKy: 2,
+                namHoc:
+                    this.selectedValue.selectedValueSchoolYear || currentYear - 2,
+                type: null
+            }
+            const response = await sendRequest(
+                Api.bieuDoPhoDiem.bieuDoPhoDiemHocKy,
+                this.requesData_BieuDoPhoDiem,
+                this.requestHeaders
+            )
+            this.getDataBieuDoPhoDiem.dataBieuDoPhoDiemHKII_PhoDiem =
+                response.item.listData
+        },
         async getDataChonTruonghoc() {
             const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
                 this.selectedValue.selectedValueUnitEducation,
@@ -321,7 +495,6 @@ export default {
             )
             this.dataThongKeTangGiam.dataThongKeCount_HocSinhLenLop =
                 response.item
-            console.log(response)
         },
         async getDataBieuDoTongQuan_HocSinh() {
             await this.customGetDataBieuDoHocSinh(
@@ -424,7 +597,15 @@ export default {
                     namHoc: namHoc_Update
                 }
                 this.requestData_BieuDoHocSinh = requestData_BieuDoHocSinh_Update
+                const requesData_BieuDoPhoDiem_Update = {
+                    ...this.requesData_BieuDoPhoDiem,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
 
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update
+                }
+                this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
                 await this.getDataCount_HocSinh()
                 await this.getDataCount_HocSinhLenLop()
                 await this.getDataBieuDoTongQuan_HocSinh()
@@ -432,7 +613,9 @@ export default {
                 await this.getDataBieuDoGioiTinh_HocSinh()
                 await this.getDataBieuDoLoaiHinhDaoTao_HocSinh()
                 await this.getDataBieuDoKhuVuc_HocSinh()
-
+                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+                await this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+                await this.getDataBieuDoDanhGiaHocSinh_HocLuc()
                 setTimeout(() => {
                     loading.close()
                 }, 2000)
@@ -457,6 +640,21 @@ export default {
             }
         },
 
+        getBieuDoHLHS(data, capHoc) {
+            let result = [0, 0, 0, 0, 0, 0]
+            // console.log('Data map biểu đồ học lực học sinh:')
+            // console.log(data)
+            if (data) {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].name == capHoc) {
+                        result = data[i].data
+                    }
+                }
+            }
+            // console.log('Dữ liệu là:')
+            // console.log(result)
+            return result
+        },
         async customGetDataBieuDoHocSinh(apiEndpoint, dataKey, responseKey) {
             this.requestHeaders = {
                 token: this.authToken
@@ -514,11 +712,13 @@ export default {
         this.getDataBieuDoGioiTinh_HocSinh()
         this.getDataBieuDoLoaiHinhDaoTao_HocSinh()
         this.getDataBieuDoKhuVuc_HocSinh()
-
+        this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+        this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+        this.getDataBieuDoDanhGiaHocSinh_HocLuc()
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
         this.selectedValue.selectedValueSchoolYear = String(currentYear) - 2
-      this.handleThongKe()
+        this.handleThongKe()
     }
 }
 </script>
@@ -545,5 +745,29 @@ export default {
     margin-bottom: 10px;
 }
 
+.layout-card {
+    padding: 0px 10px 20px 10px;
+}
+.layout-card .card-header {
+    background: #f2f3f8;
+    height: 25px;
+    color: black;
+    padding: 5px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.layout-card .card-header .title {
+    margin: -5px 0px 0px 10px;
+    color: #070707;
+
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.layout-card .card-body {
+    padding: 5px;
+    background: white;
+    border: #f2f3f8 2px solid;
+    height: 300px;
+}
 /* CSS select dashboard */
 </style>
