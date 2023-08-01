@@ -522,7 +522,7 @@ export default {
             }
         },
 
-        async handleThongKe() {
+        handleThongKe() {
             try {
                 const loading = this.$loading({
                     lock: true,
@@ -572,16 +572,16 @@ export default {
                     namHoc: namHoc_Update
                 }
                 this.requesData_BieuDoPhoDiem = requesData_BieuDoPhoDiem_Update
-                await this.getDataCount_HocSinh()
-                await this.getDataCount_HocSinhLenLop()
-                await this.getDataBieuDoTongQuan_HocSinh()
-                await this.getDataBieuDoTrangThai_HocSinh()
-                await this.getDataBieuDoGioiTinh_HocSinh()
-                await this.getDataBieuDoLoaiHinhDaoTao_HocSinh()
-                await this.getDataBieuDoKhuVuc_HocSinh()
-                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
-                await this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
-                await this.getDataBieuDoDanhGiaHocSinh_HocLuc()
+                this.getDataCount_HocSinh()
+                this.getDataCount_HocSinhLenLop()
+                this.getDataBieuDoTongQuan_HocSinh()
+                this.getDataBieuDoTrangThai_HocSinh()
+                this.getDataBieuDoGioiTinh_HocSinh()
+                this.getDataBieuDoLoaiHinhDaoTao_HocSinh()
+                this.getDataBieuDoKhuVuc_HocSinh()
+                this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+                this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+                this.getDataBieuDoDanhGiaHocSinh_HocLuc()
                 setTimeout(() => {
                     loading.close()
                 }, 2000)

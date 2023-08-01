@@ -904,7 +904,7 @@ export default {
             }
         },
 
-        async handleThongKe() {
+        handleThongKe() {
             try {
                 const loading = this.$loading({
                     lock: true,
@@ -984,18 +984,18 @@ export default {
                 }
                 this.requesData_BieuDoPhanLoaiCanBo =
                     requesData_BieuDoPhanLoaiCanBo_Update
-                await this.getDataThongKeTangGiam_TongSoTruongHoc()
-                await this.getDataThongKeTangGiam_TongSoGiaoVien()
-                await this.getDataThongKeTangGiam_TongSoHocSinh()
-                await this.layDuLieuBanDo()
-                await this.getDataBieuDoTron_CanBoGiaoVien()
-                await this.getDataBieuDoTron_HocSinh()
-                await this.getDataBieuDoTron_ThongTinDiemDanh()
-                await this.getDataBieuDoTron_YTeHocSinh()
-                await this.getDataBieuDoChatLuongDaoTao_TruongHoc()
-                await this.getDataBieuDoDanhGiaHocSinh_HocLuc()
-                await this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
-                await this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
+                this.getDataThongKeTangGiam_TongSoTruongHoc()
+                this.getDataThongKeTangGiam_TongSoGiaoVien()
+                this.getDataThongKeTangGiam_TongSoHocSinh()
+                this.layDuLieuBanDo()
+                this.getDataBieuDoTron_CanBoGiaoVien()
+                this.getDataBieuDoTron_HocSinh()
+                this.getDataBieuDoTron_ThongTinDiemDanh()
+                this.getDataBieuDoTron_YTeHocSinh()
+                this.getDataBieuDoChatLuongDaoTao_TruongHoc()
+                this.getDataBieuDoDanhGiaHocSinh_HocLuc()
+                this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
+                this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
                 this.getDataBieuDoTongQuan_TrongHoc()
 
                 loading.close()
