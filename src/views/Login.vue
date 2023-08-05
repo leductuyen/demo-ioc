@@ -30,7 +30,16 @@
                         type="password"
                         error="error"
                     />
-                    <img :src="base64Image" alt="Base64 Image" />
+                    <div v-if="failCount >= 5">
+                        <CustomInput
+                            label="Nhập mã Capcha"
+                            type="text"
+                            error="error"
+                            v-model="login.input_captcha"
+                        />
+
+                        <img :src="base64Image" alt="Base64 Image" />
+                    </div>
                     <div>
                         <CustomButton
                             label="Đăng nhập"
@@ -60,37 +69,43 @@ export default {
             login: {
                 input_username: '',
                 input_password: '',
-                input_remember: ''
+                input_remember: '',
+                input_captcha: '',
+                captchaToken: ''
             },
             token: '',
-            base64Image: ''
+            base64Image: '',
+            failCount: 0
         }
     },
     methods: {
-        async getMaCapCha() {
+        async getMaCaptCha() {
             const token = {
                 token: this.token
             }
-            const response = await sendRequest(Api.auth.getMaCapCha, null, token)
+            const response = await sendRequest(Api.auth.getMaCaptCha, null, token)
             this.base64Image = 'data:image/png;base64,' + response.dataImg
+            this.captchaToken = response.tokenCap
+            console.log(response)
         },
         async handleLogin() {
             try {
-                this.getMaCapCha()
-                const loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                })
-                const response = await sendRequest(Api.auth.login, {
+                const requestData = {
                     username: this.login.input_username,
-                    password: this.login.input_password
-                })
+                    password: this.login.input_password,
 
+                    captchaToken: this.captchaToken
+                }
+                if (this.login.input_captcha) {
+                    requestData.captcha = this.login.input_captcha
+                }
+                const response = await sendRequest(Api.auth.login, requestData)
+                if (response.failCount >= 5) {
+                    this.failCount = response.failCount
+                    this.getMaCaptCha()
+                }
                 if (response.rc === 0) {
                     setTimeout(() => {
-                        loading.close()
                         this.$router.push('/')
                     }, 1000)
                     this.token = response.token
@@ -100,7 +115,6 @@ export default {
                     localStorage.setItem('activeUI', '/dashboard')
                 } else if (response.rc === 1 || response.rc === 27) {
                     setTimeout(() => {
-                        loading.close()
                         this.$message({
                             message: response.rd,
                             type: 'error'

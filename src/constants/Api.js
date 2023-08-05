@@ -15,7 +15,7 @@ const Api = {
             method: METHOD.POST,
             url: 'auth/register'
         },
-        getMaCapCha: {
+        getMaCaptCha: {
             method: METHOD.POST,
             url: 'csdlgd-user/auth/getCaptcha'
         }
