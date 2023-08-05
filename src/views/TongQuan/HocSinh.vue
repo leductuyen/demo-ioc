@@ -323,13 +323,12 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
                 hocKy: 3,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 2
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.bieuDoPhoDiem.bieuDoDanhGiaHocSinh,
@@ -344,13 +343,12 @@ export default {
             const requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
                 hocKy: 1,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 2,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear,
                 type: null
             }
             const response = await sendRequest(
@@ -365,13 +363,12 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
                 hocKy: 2,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 2,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear,
                 type: null
             }
             const response = await sendRequest(
@@ -542,6 +539,7 @@ export default {
                     this.selectedValue.selectedValueSchool,
                     'selectedValueSchool'
                 )
+                const currentYear = new Date().getFullYear() - 2
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
 
                 const requestData_ThongKeTangGiam_Update = {
@@ -549,7 +547,7 @@ export default {
                     capHocs: capHocs_Update,
                     maDonVis: maDonVis_Update,
                     maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
+                    namHoc: namHoc_Update || currentYear
                 }
 
                 this.requestData_ThongKeTangGiam =

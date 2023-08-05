@@ -496,12 +496,11 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhanLoaiCanBo = {
                 ...this.requesData_BieuDoPhanLoaiCanBo,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.bieuDoCanBoGiaoVienNhanVien.bieuDoTongQuan,
@@ -519,8 +518,7 @@ export default {
             this.requestData_BieuDoHocSinh = {
                 ...this.requestData_BieuDoHocSinh,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.bieuDoHocSinh.bieuDoTongQuan,
@@ -538,8 +536,7 @@ export default {
             this.requestData_BieuDoHocSinh = {
                 ...this.requestData_BieuDoHocSinh,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.ioc.tongQuan.thongTinDiemDanh,
@@ -557,8 +554,7 @@ export default {
             this.requestData_BieuDoHocSinh = {
                 ...this.requestData_BieuDoHocSinh,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.ioc.tongQuan.bieuDoYTe,
@@ -574,13 +570,12 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
                 hocKy: 1,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear,
                 type: null
             }
             const response = await sendRequest(
@@ -595,13 +590,12 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
                 hocKy: 2,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear,
                 type: null
             }
             const response = await sendRequest(
@@ -744,7 +738,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
@@ -769,7 +763,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
@@ -794,8 +788,7 @@ export default {
             this.requestData_BieuDoTruongHoc = {
                 ...this.requestData_BieuDoTruongHoc,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
 
             const response = await sendRequest(
@@ -821,12 +814,11 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requestData_BieuDoTruongHoc = {
                 ...this.requestData_BieuDoTruongHoc,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 Api.bieuDoTruongHoc.bieuDoTongQuan,

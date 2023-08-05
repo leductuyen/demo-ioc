@@ -77,11 +77,9 @@ export default {
             this.chart.render()
         },
         updateChart(newData) {
-            if (newData && newData.length > 0) {
-                this.chart.updateOptions({
-                    series: newData
-                })
-            }
+            this.chart.updateOptions({
+                series: newData
+            })
         }
     },
     props: {

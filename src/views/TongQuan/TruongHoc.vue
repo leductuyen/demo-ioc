@@ -371,13 +371,14 @@ export default {
                     'selectedValueSchool'
                 )
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
+                const currentYear = new Date().getFullYear() - 2
                 // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
                 const requestData_ThongKeTangGiam_Update = {
                     ...this.requestData_ThongKeTangGiam,
                     capHocs: capHocs_Update,
                     maDonVis: maDonVis_Update,
                     maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
+                    namHoc: namHoc_Update || currentYear
                 }
 
                 this.requestData_ThongKeTangGiam =
@@ -428,12 +429,11 @@ export default {
                 token: this.authToken
             }
 
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 2
             this.requestData_BieuDoTruongHoc = {
                 ...this.requestData_BieuDoTruongHoc,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
 
             const response = await sendRequest(

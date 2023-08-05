@@ -83,7 +83,7 @@ export default {
     computed: {
         defaultYear() {
             const currentYear = new Date().getFullYear()
-            const previousYear = currentYear - 1
+            const previousYear = currentYear - 2
             return `${previousYear}-${currentYear}`
         }
     },
