@@ -90,6 +90,7 @@ export default {
         },
         async handleLogin() {
             try {
+                this.getMaCaptCha()
                 const requestData = {
                     username: this.login.input_username,
                     password: this.login.input_password,
@@ -100,10 +101,11 @@ export default {
                     requestData.captcha = this.login.input_captcha
                 }
                 const response = await sendRequest(Api.auth.login, requestData)
+
                 if (response.failCount >= 5) {
                     this.failCount = response.failCount
-                    this.getMaCaptCha()
                 }
+
                 if (response.rc === 0) {
                     setTimeout(() => {
                         this.$router.push('/')

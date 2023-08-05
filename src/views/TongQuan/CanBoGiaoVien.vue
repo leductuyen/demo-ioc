@@ -211,45 +211,7 @@ export default {
             },
 
             selectedValue: {
-                selectedValueUnitEducation: [
-                    {
-                        value: '080',
-                        title: 'Phòng Giáo dục và Đào tạo Thành phố Lào Cai'
-                    },
-                    {
-                        value: '082',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Bát Xát'
-                    },
-                    {
-                        value: '083',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Mường Khương'
-                    },
-                    {
-                        value: '084',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Si Ma Cai'
-                    },
-                    {
-                        value: '085',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Bắc Hà'
-                    },
-                    {
-                        value: '086',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Bảo Thắng'
-                    },
-                    {
-                        value: '087',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Bảo Yên'
-                    },
-                    {
-                        value: '088',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Sa Pa'
-                    },
-                    {
-                        value: '089',
-                        title: 'Phòng Giáo dục và Đào tạo Huyện Văn Bàn'
-                    },
-                    { value: '10', title: 'Sở Giáo dục và Đào tạo Tỉnh Lào Cai' }
-                ], //chondonvi
+                selectedValueUnitEducation: [], //chondonvi
                 selectedValueGradeLevel: [], // choncaphoc
                 selectedValueSchool: [], //chontruonghoc
                 selectedValueSchoolYear: null //chonnamhoc
@@ -331,14 +293,14 @@ export default {
                 token: this.authToken
             }
             const currentYear = new Date().getFullYear() - 2
-            this.requesData_BieuDoPhanLoaiCanBo = {
+            const request_Data = {
                 ...this.requesData_BieuDoPhanLoaiCanBo,
                 maSo: this.authUser.province,
                 namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 apiEndpoint,
-                this.requesData_BieuDoPhanLoaiCanBo,
+                request_Data,
                 this.requestHeaders
             )
 
@@ -510,11 +472,20 @@ export default {
                     capHocs: capHocs_Update,
                     maDonVis: maDonVis_Update,
                     maTruongs: maTruongs_Update,
-                    namHoc: namHoc_Update
+                    namHoc: namHoc_Update || currentYear
                 }
                 this.requestData_BieuDoCanBoGiaoVienNhanVien =
                     requestData_BieuDoCanBoGiaoVienNhanVien_Update
 
+                const requesData_BieuDoPhanLoaiCanBo_Update = {
+                    ...this.requesData_BieuDoPhanLoaiCanBo,
+                    capHocs: capHocs_Update,
+                    maDonVis: maDonVis_Update,
+                    maTruongs: maTruongs_Update,
+                    namHoc: namHoc_Update || currentYear
+                }
+                this.requesData_BieuDoPhanLoaiCanBo =
+                    requesData_BieuDoPhanLoaiCanBo_Update
                 this.getDataCount_CanBoGiaoVien()
                 this.getDataBieuDoTongQuan_CBGVNV()
                 this.getDataBieuDoTrangThai_CBGVNV()
@@ -547,6 +518,14 @@ export default {
             }
         }
     },
+    created() {
+        // Gán giá trị cho selectedValueUnitEducation ở đây
+        this.selectedValue.selectedValueUnitEducation =
+            this.dataChonDonVi_Store.map((item) => ({
+                title: item.tenDonVi,
+                value: item.maDonVi
+            }))
+    },
     computed: {
         ...mapState({
             authUser: (state) => state.auth.user
@@ -562,14 +541,6 @@ export default {
 
     mounted() {
         this.getDataChonTruonghoc()
-        this.getDataCount_CanBoGiaoVien()
-
-        this.getDataBieuDoTongQuan_CBGVNV()
-        this.getDataBieuDoTrangThai_CBGVNV()
-        this.getDataBieuDoTrinhDoChinh_CBGVNV()
-        this.getDataBieuDoDoTuoi_CBGVNV()
-        this.getDataBieuDoGioiTinh_CBGVNV()
-        this.getDataBieuDoLoaiHopDong_CBGVNV()
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
