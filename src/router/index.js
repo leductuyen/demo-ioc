@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import ForgotPasswordVue from '@/views/ForgotPassword.vue'
 import SignUpVue from '@/views/SignUp.vue'
 import Login from '@/views/Login.vue'
+import LoginSSO from '@/views/LoginSSO.vue'
 
 // <!-- ************ Trang chủ ************ -->
 import DashBoard from '@/views/DashBoard.vue'
@@ -45,6 +46,14 @@ Vue.use(VueRouter)
 const routes = [
     // <!-- ************ Auth ************ -->
     {
+        path: '/sso/login.html',
+        name: 'LoginSSO',
+        component: LoginSSO,
+        meta: {
+            title: 'LoginSSO'
+        }
+    },
+    {
         path: '/login',
         name: 'Login',
         component: Login,
@@ -75,8 +84,8 @@ const routes = [
         name: 'DashBoard',
         component: TongQuanChung, // router trang chủ
         meta: {
-            title: 'Dash Board',
-            requiresAuth: true
+            title: 'Dash Board'
+            // requiresAuth: true
         }
     },
     {
@@ -316,14 +325,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | Đồng bộ CSDL`
-    // Kiểm tra xem trong Local Storage có token hay không
-    const token = localStorage.getItem('token')
-
-    if (!token && to.path !== '/login') {
-        // Nếu không có token và đang không ở trang login, chuyển hướng đến path login
-        next('/login')
-    } else {
-        next()
-    }
+    next()
 })
 export default router

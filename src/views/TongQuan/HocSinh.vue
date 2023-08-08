@@ -285,7 +285,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
@@ -305,7 +305,7 @@ export default {
             const requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
@@ -325,7 +325,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             this.requesData_BieuDoPhoDiem = {
                 ...this.requesData_BieuDoPhoDiem,
                 maSo: this.authUser.province,
@@ -371,7 +371,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
 
             this.requestData_ThongKeTangGiam = {
                 ...this.requestData_ThongKeTangGiam,
@@ -404,7 +404,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             const request_Data = {
                 ...this.requestData_BieuDoHocSinh,
                 capHocs: capHocs,
@@ -501,7 +501,7 @@ export default {
                     this.selectedValue.selectedValueSchool,
                     'selectedValueSchool'
                 )
-                const currentYear = new Date().getFullYear() - 2
+                const currentYear = new Date().getFullYear() - 1
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
 
                 const requestData_ThongKeTangGiam_Update = {
@@ -570,12 +570,11 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear()
+            const currentYear = new Date().getFullYear() - 1
             this.requestData_BieuDoHocSinh = {
                 ...this.requestData_BieuDoHocSinh,
                 maSo: this.authUser.province,
-                namHoc:
-                    this.selectedValue.selectedValueSchoolYear || currentYear - 1
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
             const response = await sendRequest(
                 apiEndpoint,
@@ -626,7 +625,7 @@ export default {
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
-        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 2
+        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 1
         this.handleThongKe()
     }
 }

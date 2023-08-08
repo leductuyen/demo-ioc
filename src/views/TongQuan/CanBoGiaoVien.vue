@@ -272,7 +272,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
 
             this.requestData_ThongKeTangGiam = {
                 ...this.requestData_ThongKeTangGiam,
@@ -292,7 +292,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             const request_Data = {
                 ...this.requesData_BieuDoPhanLoaiCanBo,
                 maSo: this.authUser.province,
@@ -333,7 +333,7 @@ export default {
             this.requestHeaders = {
                 token: this.authToken
             }
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             this.requestData_BieuDoCanBoGiaoVienNhanVien = {
                 ...this.requestData_BieuDoCanBoGiaoVienNhanVien,
                 maSo: this.authUser.province,
@@ -454,7 +454,7 @@ export default {
                     'selectedValueSchool'
                 )
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
-                const currentYear = new Date().getFullYear() - 2
+                const currentYear = new Date().getFullYear() - 1
                 // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
                 const requestData_ThongKeTangGiam_Update = {
                     ...this.requestData_ThongKeTangGiam,
@@ -544,7 +544,7 @@ export default {
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
-        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 2
+        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 1
         this.handleThongKe()
     }
 }

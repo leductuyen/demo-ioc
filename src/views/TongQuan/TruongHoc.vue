@@ -312,7 +312,7 @@ export default {
                     'selectedValueSchool'
                 )
                 const namHoc_Update = this.selectedValue.selectedValueSchoolYear
-                const currentYear = new Date().getFullYear() - 2
+                const currentYear = new Date().getFullYear() - 1
                 // Cập nhật các giá trị mới trong requestData_ThongKeTangGiam
                 const requestData_ThongKeTangGiam_Update = {
                     ...this.requestData_ThongKeTangGiam,
@@ -370,7 +370,7 @@ export default {
                 token: this.authToken
             }
 
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             this.requestData_BieuDoTruongHoc = {
                 ...this.requestData_BieuDoTruongHoc,
                 maSo: this.authUser.province,
@@ -439,7 +439,7 @@ export default {
         // this.getDataCount_TruongHoc()
 
         // giá trị mặc định của chọn năm học
-        const currentYear = new Date().getFullYear() - 2
+        const currentYear = new Date().getFullYear() - 1
         this.selectedValue.selectedValueSchoolYear = String(currentYear)
         this.handleThongKe()
     }

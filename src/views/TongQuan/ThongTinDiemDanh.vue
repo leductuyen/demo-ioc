@@ -303,7 +303,7 @@ export default {
                 'selectedValueSchool'
             )
             const namHocs = this.selectedValue.selectedValueSchoolYear
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             const request_Header = {
                 token: this.authToken
             }
@@ -354,7 +354,7 @@ export default {
                 'selectedValueSchool'
             )
             const namHocs = this.selectedValue.selectedValueSchoolYear
-            const currentYear = new Date().getFullYear() - 2
+            const currentYear = new Date().getFullYear() - 1
             const request_Header = {
                 token: this.authToken
             }
@@ -422,7 +422,7 @@ export default {
                     'selectedValueSchool'
                 )
                 const namHocs = this.selectedValue.selectedValueSchoolYear
-                const currentYear = new Date().getFullYear() - 2
+                const currentYear = new Date().getFullYear() - 1
                 const request_ThongKeTangGiam_Update = {
                     capHocs: capHocs,
                     maDonVis: maDonVis,
@@ -483,7 +483,7 @@ export default {
 
         // giá trị mặc định của chọn năm học
         const currentYear = new Date().getFullYear()
-        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 2
+        this.selectedValue.selectedValueSchoolYear = String(currentYear) - 1
         this.handleThongKe()
     }
 }

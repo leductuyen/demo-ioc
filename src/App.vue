@@ -15,8 +15,10 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+
 import Header from './components/Header.vue'
 import LeftBar from './components/LeftBar.vue'
+
 export default {
     name: 'app',
     components: {
@@ -37,6 +39,7 @@ export default {
     methods: {
         checkRoute() {
             if (
+                this.$route.name === 'LoginSSO' ||
                 this.$route.name === 'Login' ||
                 this.$route.name === 'Sign-up' ||
                 this.$route.name === 'Forgot-password'
