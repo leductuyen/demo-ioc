@@ -176,24 +176,27 @@ export default {
         },
         async handleLoginSSO() {
             const response = await sendRequest(Api.auth.loginSSo)
+            const baseUrl = `https://csdl.dtsgroup.com.vn`
             const redirect_uri = '/sso/login.html'
             const postLogoutRedirectUri = '/sso/logout.html'
+
             let params = {
                 response_type: 'code',
                 Issuer: 'https://id.nentanggiaoduc.edu.vn',
-                redirect_uri: redirect_uri,
-                postLogoutRedirectUri: postLogoutRedirectUri,
+                redirect_uri: `${baseUrl}${redirect_uri}`,
+                postLogoutRedirectUri: `${baseUrl}${postLogoutRedirectUri}`,
                 client_id: 'csdln_client',
                 state: this.generateString(5),
                 scope: 'openid profile offline_access esmartup',
                 code_challenge: response.code_challenge,
                 code_challenge_method: 'S256'
             }
+
             let query = this.objectToQueryString(params)
-            console.log('query', query)
+            // console.log('query', query)
             let urlLogin =
-                'https://id.nentanggiaoduc.edu.vn/connect/authorize?' + query
-            console.log('url', urlLogin)
+                'https://id.nentanggiaoduc1.edu.vn/connect/authorize?' + query
+
             window.location.href = urlLogin
         }
     },
