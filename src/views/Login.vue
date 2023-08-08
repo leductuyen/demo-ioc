@@ -176,7 +176,7 @@ export default {
         },
         async handleLoginSSO() {
             const response = await sendRequest(Api.auth.loginSSo)
-            const redirect_uri = '/login'
+            const redirect_uri = 'https://csdl.dtsgroup.com.vn/login'
             const postLogoutRedirectUri = ''
             let params = {
                 response_type: 'code',
