@@ -72,6 +72,7 @@ import sendRequest from '@/services'
 import CustomInput from '../components/CustomInput.vue'
 import CustomButton from '@/components/CustomButton.vue'
 import { Router } from '@/constants/Router'
+import LoginSSO from './LoginSSO.vue'
 import Api from '@/constants/Api'
 
 export default {
@@ -176,6 +177,7 @@ export default {
         },
         async handleLoginSSO() {
             const response = await sendRequest(Api.auth.loginSSo)
+            this.code_verifier = response.code_verifier
             const baseUrl = `https://csdl.dtsgroup.com.vn`
             const redirect_uri = '/sso/login.html'
             const postLogoutRedirectUri = '/sso/logout.html'
@@ -193,7 +195,7 @@ export default {
             }
 
             let query = this.objectToQueryString(params)
-            // console.log('query', query)
+            console.log('query', query)
             let urlLogin =
                 'https://id.nentanggiaoduc.edu.vn/connect/authorize?' + query
 
