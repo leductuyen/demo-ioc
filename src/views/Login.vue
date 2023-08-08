@@ -176,11 +176,11 @@ export default {
         },
         async handleLoginSSO() {
             const response = await sendRequest(Api.auth.loginSSo)
-            const redirect_uri = 'https://csdl.dtsgroup.com.vn/login'
-            const postLogoutRedirectUri = ''
+            const redirect_uri = '/sso/login.html'
+            const postLogoutRedirectUri = '/sso/logout.html'
             let params = {
                 response_type: 'code',
-                Issuer: `https://id.nentanggiaoduc.edu.vn`,
+                Issuer: 'https://id.nentanggiaoduc.edu.vn',
                 redirect_uri: redirect_uri,
                 postLogoutRedirectUri: postLogoutRedirectUri,
                 client_id: 'csdln_client',
