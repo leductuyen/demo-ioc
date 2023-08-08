@@ -11,6 +11,10 @@ const Api = {
             method: METHOD.POST,
             url: 'csdlgd-user/auth/login'
         },
+        loginSSo: {
+            method: METHOD.GET,
+            url: 'csdlgd-user/adminUser/getSSOHash'
+        },
         register: {
             method: METHOD.POST,
             url: 'auth/register'

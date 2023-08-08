@@ -30,23 +30,36 @@
                         type="password"
                         error="error"
                     />
-                    <div v-if="failCount >= 5">
-                        <CustomInput
-                            label="Nhập mã Capcha"
-                            type="text"
-                            error="error"
-                            v-model="login.input_captcha"
-                        />
-
-                        <img :src="base64Image" alt="Base64 Image" />
+                    <div class="captcha" v-if="failCount >= 5">
+                        <div>
+                            <CustomInput
+                                label="Nhập mã Captcha"
+                                type="text"
+                                error="error"
+                                v-model="login.input_captcha"
+                            />
+                        </div>
+                        <div>
+                            <img :src="base64Image" alt="" />
+                        </div>
                     </div>
-                    <div>
-                        <CustomButton
-                            label="Đăng nhập"
-                            @click="handleLogin"
+                    <div style="margin-top: 30px">
+                        <button
                             size="small"
-                            type="primary"
-                        />
+                            type="button"
+                            class="btn btn-info btn-block"
+                            @click="handleLogin"
+                        >
+                            Đăng nhập
+                        </button>
+                        <button
+                            size="small"
+                            type="button"
+                            class="btn btn-primary btn-block"
+                            @click="handleLoginSSO"
+                        >
+                            Đăng nhập SSO
+                        </button>
                     </div>
                 </div>
             </div>
@@ -63,7 +76,9 @@ import Api from '@/constants/Api'
 
 export default {
     name: 'loGin',
-    components: { CustomInput, CustomButton },
+    components: {
+        CustomInput
+    },
     data() {
         return {
             login: {
@@ -86,28 +101,29 @@ export default {
             const response = await sendRequest(Api.auth.getMaCaptCha, null, token)
             this.base64Image = 'data:image/png;base64,' + response.dataImg
             this.captchaToken = response.tokenCap
-            console.log(response)
         },
         async handleLogin() {
             try {
-                this.getMaCaptCha()
                 const requestData = {
                     username: this.login.input_username,
                     password: this.login.input_password,
 
-                    captchaToken: this.captchaToken
+                    captcha_token: this.captchaToken
                 }
                 if (this.login.input_captcha) {
                     requestData.captcha = this.login.input_captcha
                 }
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading ...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                })
                 const response = await sendRequest(Api.auth.login, requestData)
-
-                if (response.failCount >= 5) {
-                    this.failCount = response.failCount
-                }
 
                 if (response.rc === 0) {
                     setTimeout(() => {
+                        loading.close()
                         this.$router.push('/')
                     }, 1000)
                     this.token = response.token
@@ -117,15 +133,68 @@ export default {
                     localStorage.setItem('activeUI', '/dashboard')
                 } else if (response.rc === 1 || response.rc === 27) {
                     setTimeout(() => {
+                        loading.close()
                         this.$message({
                             message: response.rd,
                             type: 'error'
                         })
                     }, 1000)
                 }
+                if (response.rc !== 0 && response.failCount >= 5) {
+                    loading.close()
+                    this.$message({
+                        message: response.rd,
+                        type: 'error'
+                    })
+                    this.getMaCaptCha()
+                    this.failCount = response.failCount
+                }
             } catch (error) {
                 console.log(error)
             }
+        },
+        generateString(length) {
+            let characters =
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            let result = ''
+            const charactersLength = characters.length
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(
+                    Math.floor(Math.random() * charactersLength)
+                )
+            }
+            return result
+        },
+        objectToQueryString(obj) {
+            let str = []
+            for (let p in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, p)) {
+                    str.push(p + '=' + obj[p])
+                }
+            }
+            return str.join('&')
+        },
+        async handleLoginSSO() {
+            const response = await sendRequest(Api.auth.loginSSo)
+            const redirect_uri = '/login'
+            const postLogoutRedirectUri = ''
+            let params = {
+                response_type: 'code',
+                Issuer: `https://id.nentanggiaoduc.edu.vn`,
+                redirect_uri: redirect_uri,
+                postLogoutRedirectUri: postLogoutRedirectUri,
+                client_id: 'csdln_client',
+                state: this.generateString(5),
+                scope: 'openid profile offline_access esmartup',
+                code_challenge: response.code_challenge,
+                code_challenge_method: 'S256'
+            }
+            let query = this.objectToQueryString(params)
+            console.log('query', query)
+            let urlLogin =
+                'https://id.nentanggiaoduc.edu.vn/connect/authorize?' + query
+            console.log('url', urlLogin)
+            window.location.href = urlLogin
         }
     },
     mounted() {}
@@ -340,5 +409,14 @@ export default {
     color: #fff;
     border: none;
     background: none;
+}
+.captcha {
+    display: flex;
+    align-items: center;
+}
+.captcha img {
+    height: 40px;
+    width: 100%;
+    margin-top: 15px;
 }
 </style>
