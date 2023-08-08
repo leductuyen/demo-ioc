@@ -195,7 +195,7 @@ export default {
             let query = this.objectToQueryString(params)
             // console.log('query', query)
             let urlLogin =
-                'https://id.nentanggiaoduc1.edu.vn/connect/authorize?' + query
+                'https://id.nentanggiaoduc.edu.vn/connect/authorize?' + query
 
             window.location.href = urlLogin
         }
