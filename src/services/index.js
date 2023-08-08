@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = `${'https://apimoet.dtsgroup.com.vn'}`
+const baseUrl = `${'https://ioc-api.csdl.edu.vn'}`
 const sendRequest = async (api, data, headers, params, ...rest) => {
     const { method, url } = api
 
