@@ -84,7 +84,7 @@
                         <div class="card-header">
                             <div class="title">
                                 DỰ BÁO SỐ LƯỢNG CÁN BỘ GIÁO VIÊN THEO LOẠI HÌNH
-                                TRƯỜNG
+                                ĐÀO TẠO
                             </div>
                         </div>
                         <div class="card-body">
@@ -154,22 +154,45 @@ export default {
             },
 
             selectedValue: {
-                selectedValueUnitEducation: [{
-                  "value": "080",
-                  "title": "Phòng Giáo dục và Đào tạo Thành phố Lào Cai"
-                }, {"value": "082", "title": "Phòng Giáo dục và Đào tạo Huyện Bát Xát"}, {
-                  "value": "083",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Mường Khương"
-                }, {"value": "084", "title": "Phòng Giáo dục và Đào tạo Huyện Si Ma Cai"}, {
-                  "value": "085",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Bắc Hà"
-                }, {"value": "086", "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Thắng"}, {
-                  "value": "087",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Bảo Yên"
-                }, {"value": "088", "title": "Phòng Giáo dục và Đào tạo Huyện Sa Pa"}, {
-                  "value": "089",
-                  "title": "Phòng Giáo dục và Đào tạo Huyện Văn Bàn"
-                }, {"value": "10", "title": "Sở Giáo dục và Đào tạo Tỉnh Lào Cai"}], //chondonvi
+                selectedValueUnitEducation: [
+                    {
+                        value: '080',
+                        title: 'Phòng Giáo dục và Đào tạo Thành phố Lào Cai'
+                    },
+                    {
+                        value: '082',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bát Xát'
+                    },
+                    {
+                        value: '083',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Mường Khương'
+                    },
+                    {
+                        value: '084',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Si Ma Cai'
+                    },
+                    {
+                        value: '085',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bắc Hà'
+                    },
+                    {
+                        value: '086',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bảo Thắng'
+                    },
+                    {
+                        value: '087',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Bảo Yên'
+                    },
+                    {
+                        value: '088',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Sa Pa'
+                    },
+                    {
+                        value: '089',
+                        title: 'Phòng Giáo dục và Đào tạo Huyện Văn Bàn'
+                    },
+                    { value: '10', title: 'Sở Giáo dục và Đào tạo Tỉnh Lào Cai' }
+                ], //chondonvi
                 selectedValueGradeLevel: [], // choncaphoc
                 selectedValueSchool: [], //chontruonghoc
                 selectedValueSchoolYear: null //chonnamhoc

@@ -105,8 +105,7 @@ export default {
                 '#FF9800',
                 '#F781F3',
                 '#FFFF00',
-                '#19070B',
-                '#00FF40'
+                '#19070B'
             ],
             chart: null // Lưu trữ đối tượng biểu đồ để hủy render khi cần thiết
         }

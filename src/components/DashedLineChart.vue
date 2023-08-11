@@ -57,7 +57,7 @@ export default {
                     '#FFA200',
                     '#0000CC',
                     '#FF0000',
-                    '#FB4444'
+                    '#FF00FF'
                 ],
                 chart: {
                     height: '300',

@@ -348,8 +348,8 @@ export default {
                 'Tiểu học',
                 'THCS',
                 'THPT',
-                'Liên cấp',
                 'GDTX',
+                'Liên cấp 1+2',
                 'Liên cấp 2+3',
                 'Khác'
             ],
