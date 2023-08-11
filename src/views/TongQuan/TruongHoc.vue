@@ -241,7 +241,10 @@ export default {
                 this.requestHeaders,
                 null
             )
-            this.getDataESelect.ESelectSchool = response.rows
+            this.getDataESelect.ESelectSchool = response.rows.map((item) => ({
+                ...item,
+                tenTruongHoc: `${item.tenTruongHoc} - [${item.maTruongHoc}]`
+            }))
         },
 
         async getDataBieuDoTongQuan_TrongHoc() {

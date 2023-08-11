@@ -285,7 +285,10 @@ export default {
                 this.requestHeaders,
                 null
             )
-            this.getDataESelect.ESelectSchool = response.rows
+            this.getDataESelect.ESelectSchool = response.rows.map((item) => ({
+                ...item,
+                tenTruongHoc: `${item.tenTruongHoc} - [${item.maTruongHoc}]`
+            }))
             // store.commit('SET_DATA_CHONTRUONGHOC_STORE', response.rows)
         },
 
