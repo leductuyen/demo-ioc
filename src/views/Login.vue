@@ -13,7 +13,7 @@
                             alt="Logo"
                         />
                     </div>
-                    <h3>Đăng nhậ11p</h3>
+                    <h3>Đăng nhập</h3>
                     <p class="account-subtitle">
                         Đăng nhập vào tài khoản của bạn để tiếp tục
                     </p>
