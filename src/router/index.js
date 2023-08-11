@@ -325,6 +325,13 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | Đồng bộ CSDL`
-    next()
+    const token = localStorage.getItem('token')
+
+    if (!token && to.path !== '/login') {
+        // Nếu không có token và đang không ở trang login, chuyển hướng đến path login
+        next('/login')
+    } else {
+        next()
+    }
 })
 export default router
