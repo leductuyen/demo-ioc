@@ -10,6 +10,21 @@
 import ApexCharts from 'apexcharts'
 
 export default {
+    data() {
+        return {
+            colorMapping: {
+                MN: '#2E93fA',
+                TH: '#66DA26',
+                THCS: '#546E7A',
+                THPT: '#E91E63',
+                GDTX: '#FF9800',
+                LC12: '#F781F3',
+                LC23: '#FFFF00',
+                LCK: '#19070B'
+                // ... Các tên khác và màu sắc tương ứng
+            }
+        }
+    },
     mounted() {
         this.renderChart()
     },
@@ -18,7 +33,6 @@ export default {
             deep: true,
             handler(newData) {
                 this.updateChart(newData)
-                // console.log(newData)
             }
         }
     },
@@ -113,11 +127,13 @@ export default {
             this.chart.render()
         },
         updateChart(newData) {
+            console.log(newData)
             if (this.chart) {
                 this.chart.updateSeries(
-                    newData.map((item) => ({
+                    newData.map((item, index) => ({
                         name: item.name,
-                        data: item.data
+                        data: item.data,
+                        color: this.colorMapping[item.name] || null
                     }))
                 )
                 this.chart.updateOptions({

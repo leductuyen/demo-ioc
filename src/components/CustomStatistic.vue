@@ -36,14 +36,6 @@ export default {
             }
             return data
         }
-    },
-    watch: {
-        data(newValue) {
-            console.log('data', newValue)
-        },
-        data2(newValue) {
-            console.log('data2', newValue)
-        }
     }
 }
 </script>
