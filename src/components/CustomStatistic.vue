@@ -4,8 +4,9 @@
             <span>{{ title }}</span>
             <div class="layout-data">
                 <div class="data">
-                    {{ formatData(data) }}<span class="span">/</span>
-                    {{ formatData(data2) }}
+                    {{ formatData(data) }}<span v-if="data2" class="span">/</span>
+
+                    <span v-if="data2">{{ formatData(data2) }}</span>
                 </div>
                 <div class="content">{{ content }}</div>
             </div>
