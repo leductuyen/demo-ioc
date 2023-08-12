@@ -39,7 +39,9 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoChatLuongDaoTao_TruongHoc
+                                    customSort(
+                                        dataBieuDoChatLuongDaoTao_TruongHoc
+                                    )
                                 "
                                 :xaxis_categories="
                                     xaxisCategories.chatLuongDaoTao
@@ -58,7 +60,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoLoaiHinhDaoTao_TruongHoc
+                                    customSort(dataBieuDoLoaiHinhDaoTao_TruongHoc)
                                 "
                                 :xaxis_categories="xaxisCategories.loaiHinhDaoTao"
                             />
@@ -97,9 +99,40 @@ export default {
                 'Khác'
             ],
             xaxisCategories: {
-                chatLuongDaoTao: ['C.Lượng ', 'Chuẩn mức 1', 'Chuẩn mức 2'],
+                chatLuongDaoTao: [
+                    'C.Lượng tối thiểu',
+                    'Chuẩn mức 1',
+                    'Chuẩn mức 2'
+                ],
                 loaiHinhDaoTao: ['Công lập', 'Tư thục', 'Dân lập']
             }
+        }
+    },
+    mounted() {
+        this.customSort()
+    },
+    methods: {
+        customSort(arr) {
+            const order = [
+                'MN',
+                'TH',
+                'THCS',
+                'THPT',
+                'GDTX',
+                'LC12',
+                'LC23',
+                'LCK'
+            ]
+            const sortedArray = []
+
+            for (const name of order) {
+                const obj = arr?.find((item) => item.name === name)
+                if (obj) {
+                    sortedArray.push(obj)
+                }
+            }
+
+            return sortedArray
         }
     },
     props: {

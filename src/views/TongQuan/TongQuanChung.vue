@@ -195,7 +195,9 @@
                                 <div class="card-body">
                                     <StackedColumnChart
                                         :data_StackedColumnChart="
-                                            getDataBieuDoTruongHoc.dataBieuDoChatLuongDaoTao_TruongHoc
+                                            customSort(
+                                                getDataBieuDoTruongHoc.dataBieuDoChatLuongDaoTao_TruongHoc
+                                            )
                                         "
                                         :xaxis_categories="
                                             xaxisCategories_TongQuanChung.chatLuongDaoTao
@@ -492,6 +494,28 @@ export default {
     },
 
     methods: {
+        customSort(arr) {
+            const order = [
+                'MN',
+                'TH',
+                'THCS',
+                'THPT',
+                'GDTX',
+                'LC12',
+                'LC23',
+                'LCK'
+            ]
+            const sortedArray = []
+
+            for (const name of order) {
+                const obj = arr?.find((item) => item.name === name)
+                if (obj) {
+                    sortedArray.push(obj)
+                }
+            }
+
+            return sortedArray
+        },
         async getDataBieuDoTron_CanBoGiaoVien() {
             this.requestHeaders = {
                 token: this.authToken

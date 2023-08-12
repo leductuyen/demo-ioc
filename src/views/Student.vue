@@ -73,7 +73,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoGioiTinh_HocSinh
+                                    customSort(dataBieuDoGioiTinh_HocSinh)
                                 "
                                 :xaxis_categories="xaxisCategories.gioiTinh"
                             />
@@ -90,7 +90,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoLoaiHinhDaoTao_HocSinh
+                                    customSort(dataBieuDoLoaiHinhDaoTao_HocSinh)
                                 "
                                 :xaxis_categories="xaxisCategories.loaiHinhDaoTao"
                             />
@@ -105,7 +105,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoKhuVuc_HocSinh
+                                    customSort(dataBieuDoKhuVuc_HocSinh)
                                 "
                                 :xaxis_categories="xaxisCategories.khuVuc"
                             />
@@ -156,6 +156,28 @@ export default {
         }
     },
     methods: {
+        customSort(arr) {
+            const order = [
+                'MN',
+                'TH',
+                'THCS',
+                'THPT',
+                'GDTX',
+                'LC12',
+                'LC23',
+                'LCK'
+            ]
+            const sortedArray = []
+
+            for (const name of order) {
+                const obj = arr?.find((item) => item.name === name)
+                if (obj) {
+                    sortedArray.push(obj)
+                }
+            }
+
+            return sortedArray
+        },
         getBieuDoHLHS(data, capHoc) {
             let result = [0, 0, 0, 0, 0, 0]
             // console.log('Data map biểu đồ học lực học sinh:')
