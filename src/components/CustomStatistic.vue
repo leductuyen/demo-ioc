@@ -4,7 +4,7 @@
             <span>{{ title }}</span>
             <div class="layout-data">
                 <div class="data">
-                    {{ formatData(data) }}<span v-if="data2" class="span">/</span>
+                    {{ formatData(data) }}<span class="span">/</span>
                     {{ formatData(data2) }}
                 </div>
                 <div class="content">{{ content }}</div>
@@ -35,6 +35,14 @@ export default {
                 return data.toLocaleString()
             }
             return data
+        }
+    },
+    watch: {
+        data(newValue) {
+            console.log('data', newValue)
+        },
+        data2(newValue) {
+            console.log('data2', newValue)
         }
     }
 }

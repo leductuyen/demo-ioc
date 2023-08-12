@@ -96,13 +96,14 @@ export default {
                     opacity: 1
                 },
                 colors: [
-                    '#969AFB',
-                    '#FFA200',
-                    '#60BFFF',
-                    '#90ED7D',
-                    '#FB4444',
-                    '#014839',
-                    '#FF00FF'
+                    '#2E93fA',
+                    '#66DA26',
+                    '#546E7A',
+                    '#E91E63',
+                    '#FF9800',
+                    '#F781F3',
+                    '#FFFF00',
+                    '#19070B'
                 ]
             }
 
@@ -143,10 +144,5 @@ export default {
 <style scoped>
 .chart-container {
     width: 100%;
-}
-
-.bieudo.scorllWidth {
-    //overflow-x: scroll;
-    //overflow-y: hidden;
 }
 </style>

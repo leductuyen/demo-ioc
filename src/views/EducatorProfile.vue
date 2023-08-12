@@ -52,7 +52,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoTrinhDoChinh_CBGVNV
+                                    customSort(dataBieuDoTrinhDoChinh_CBGVNV)
                                 "
                                 :xaxis_categories="xaxisCategories.trinhDoChinh"
                             />
@@ -81,7 +81,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoGioiTinh_CBGVNV
+                                    customSort(dataBieuDoGioiTinh_CBGVNV)
                                 "
                                 :xaxis_categories="xaxisCategories.gioiTinh"
                             />
@@ -96,7 +96,7 @@
                         <div class="card-body">
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    dataBieuDoLoaiHopDong_CBGVNV
+                                    customSort(dataBieuDoLoaiHopDong_CBGVNV)
                                 "
                                 :xaxis_categories="xaxisCategories.loaiHopDong"
                             />
@@ -154,6 +154,30 @@ export default {
                 ],
                 trangThai: ['Đang làm việc', 'Chuyển đến', 'Chuyển đi', 'Khác']
             }
+        }
+    },
+    methods: {
+        customSort(arr) {
+            const order = [
+                'MN',
+                'TH',
+                'THCS',
+                'THPT',
+                'GDTX',
+                'LC12',
+                'LC23',
+                'LCK'
+            ]
+            const sortedArray = []
+
+            for (const name of order) {
+                const obj = arr?.find((item) => item.name === name)
+                if (obj) {
+                    sortedArray.push(obj)
+                }
+            }
+
+            return sortedArray
         }
     },
     props: {
