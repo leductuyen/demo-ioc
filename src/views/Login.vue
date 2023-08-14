@@ -17,49 +17,52 @@
                     <p class="account-subtitle">
                         Đăng nhập vào tài khoản của bạn để tiếp tục
                     </p>
+                    <div>
+                        <label>Tài khoản</label>
+                        <el-input
+                            placeholder=""
+                            v-model="login.input_username"
+                            size="small"
+                            @input="updateLoginButtonState"
+                        ></el-input>
+                    </div>
+                    <div class="mt-3">
+                        <label>Mật khẩu</label>
+                        <el-input
+                            show-password
+                            size="small"
+                            placeholder=""
+                            v-model="login.input_password"
+                            @input="updateLoginButtonState"
+                        ></el-input>
+                    </div>
 
-                    <CustomInput
-                        label="Tài khoản"
-                        v-model="login.input_username"
-                        type="text"
-                        error="error"
-                    />
-                    <CustomInput
-                        label="Mật khẩu"
-                        v-model="login.input_password"
-                        type="password"
-                        error="error"
-                    />
+                    <span v-if="errorMessage" class="error-message">
+                        {{ errorMessage }}
+                    </span>
                     <div class="captcha" v-if="failCount >= 5">
                         <div>
-                            <CustomInput
-                                label="Nhập mã Captcha"
-                                type="text"
-                                error="error"
+                            <label>Nhập mã Captcha</label>
+                            <el-input
+                                size="small"
+                                placeholder=""
                                 v-model="login.input_captcha"
-                            />
+                            ></el-input>
                         </div>
                         <div>
                             <img :src="base64Image" alt="" />
                         </div>
                     </div>
-                    <div style="margin-top: 30px">
-                        <button
+                    <div class="mt-3">
+                        <el-button
+                            :disabled="isLoginDisabled"
                             size="small"
-                            type="button"
-                            class="btn btn-info btn-block"
+                            type="primary"
+                            class="btn-block"
                             @click="handleLogin"
                         >
                             Đăng nhập
-                        </button>
-                        <button
-                            size="small"
-                            type="button"
-                            class="btn btn-primary btn-block"
-                            @click="handleLoginSSO"
-                        >
-                            Đăng nhập SSO
-                        </button>
+                        </el-button>
                     </div>
                 </div>
             </div>
@@ -69,19 +72,15 @@
 <script>
 import store from '@/store'
 import sendRequest from '@/services'
-import CustomInput from '../components/CustomInput.vue'
-import CustomButton from '@/components/CustomButton.vue'
-import { Router } from '@/constants/Router'
-import LoginSSO from './LoginSSO.vue'
+
 import Api from '@/constants/Api'
 
 export default {
     name: 'loGin',
-    components: {
-        CustomInput
-    },
+    components: {},
     data() {
         return {
+            isLoginDisabled: true,
             login: {
                 input_username: '',
                 input_password: '',
@@ -91,10 +90,16 @@ export default {
             },
             token: '',
             base64Image: '',
-            failCount: 0
+            failCount: 0,
+            errorMessage: ''
         }
     },
     methods: {
+        updateLoginButtonState() {
+            this.isLoginDisabled =
+                this.login.input_username.trim() === '' ||
+                this.login.input_password.length < 3
+        },
         async getMaCaptCha() {
             const token = {
                 token: this.token
@@ -133,76 +138,26 @@ export default {
                     localStorage.setItem('activeMenu', '/dashboard')
                     localStorage.setItem('activeUI', '/dashboard')
                 } else if (response.rc === 1 || response.rc === 27) {
-                    setTimeout(() => {
-                        loading.close()
-                        this.$message({
-                            message: response.rd,
-                            type: 'error'
-                        })
-                    }, 1000)
+                    loading.close()
+                    this.errorMessage = response.rd
                 }
                 if (response.rc !== 0 && response.failCount >= 5) {
                     loading.close()
-                    this.$message({
-                        message: response.rd,
-                        type: 'error'
-                    })
+                    this.errorMessage = response.rd
                     this.getMaCaptCha()
                     this.failCount = response.failCount
                 }
             } catch (error) {
                 console.log(error)
             }
-        },
-        generateString(length) {
-            let characters =
-                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-            let result = ''
-            const charactersLength = characters.length
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(
-                    Math.floor(Math.random() * charactersLength)
-                )
-            }
-            return result
-        },
-        objectToQueryString(obj) {
-            let str = []
-            for (let p in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, p)) {
-                    str.push(p + '=' + obj[p])
-                }
-            }
-            return str.join('&')
-        },
-        async handleLoginSSO() {
-            const response = await sendRequest(Api.auth.loginSSo)
-            this.code_verifier = response.code_verifier
-            const baseUrl = `https://csdl.dtsgroup.com.vn`
-            const redirect_uri = '/sso/login.html'
-            const postLogoutRedirectUri = '/sso/logout.html'
-
-            let params = {
-                response_type: 'code',
-                Issuer: 'https://id.nentanggiaoduc.edu.vn',
-                redirect_uri: `${baseUrl}${redirect_uri}`,
-                postLogoutRedirectUri: `${baseUrl}${postLogoutRedirectUri}`,
-                client_id: 'csdln_client',
-                state: this.generateString(5),
-                scope: 'openid profile offline_access esmartup',
-                code_challenge: response.code_challenge,
-                code_challenge_method: 'S256'
-            }
-
-            let query = this.objectToQueryString(params)
-            console.log('query', query)
-            let urlLogin =
-                'https://id.nentanggiaoduc.edu.vn/connect/authorize?' + query
-
-            window.location.href = urlLogin
         }
     },
-    mounted() {}
+    isLoginDisabled() {
+        return (
+            this.login.input_username.trim() === '' &&
+            this.login.input_password.length < 3
+        )
+    }
 }
 </script>
 
@@ -420,8 +375,14 @@ export default {
     align-items: center;
 }
 .captcha img {
-    height: 40px;
+    height: 30px;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 30px;
+}
+.error-message {
+    font-style: italic;
+    color: red;
+    font-weight: 500;
+    font-size: 13px;
 }
 </style>
