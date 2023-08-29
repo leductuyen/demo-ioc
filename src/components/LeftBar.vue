@@ -5,7 +5,7 @@
         :style="{ width: leftBarWidth }"
     >
         <div class="menu-title">
-            <span>{{ this.authUser?.display_name }}</span>
+            <span>{{ this.authUser.display_name }}</span>
             <span v-if="isCollapseLeftBar === false">
                 <hr />
             </span>
