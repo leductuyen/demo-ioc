@@ -63,6 +63,13 @@
                         >
                             Đăng nhập
                         </el-button>
+                        <!-- <button
+                            type="button"
+                            class="btn btn-primary btn-block"
+                            @click="handleLoginSSO"
+                        >
+                            Đăng nhập SSO
+                        </button> -->
                     </div>
                 </div>
             </div>
@@ -150,6 +157,50 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        generateString(length) {
+            let characters =
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            let result = ''
+            const charactersLength = characters.length
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(
+                    Math.floor(Math.random() * charactersLength)
+                )
+            }
+            return result
+        },
+        objectToQueryString(obj) {
+            let str = []
+            for (let p in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, p)) {
+                    str.push(p + '=' + obj[p])
+                }
+            }
+            return str.join('&')
+        },
+        async handleLoginSSO() {
+            const response = await sendRequest(Api.auth.loginSSo)
+            const baseUrl = `https://csdl.dtsgroup.com.vn`
+            const redirect_uri = '/sso/login.html'
+            const postLogoutRedirectUri = '/sso/logout.html'
+            let params = {
+                response_type: 'code',
+                Issuer: 'https://id.nentanggiaoduc.edu.vn',
+                redirect_uri: `${baseUrl}${redirect_uri}`,
+                postLogoutRedirectUri: `${baseUrl}${postLogoutRedirectUri}`,
+                client_id: 'csdln_client',
+                state: this.generateString(5),
+                scope: 'openid profile offline_access esmartup',
+                code_challenge: response.code_challenge,
+                code_challenge_method: 'S256'
+            }
+            let query = this.objectToQueryString(params)
+            console.log('query', query)
+            let urlLogin =
+                'https://id.nentanggiaoduc.edu.vn/connect/authorize?' + query
+            console.log('url', urlLogin)
+            window.location.href = urlLogin
         }
     },
     isLoginDisabled() {

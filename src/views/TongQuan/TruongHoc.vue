@@ -130,6 +130,9 @@
             :dataBieuDoLoaiHinhDaoTao_TruongHoc="
                 getDataBieuDoTruongHoc.dataBieuDoLoaiHinhDaoTao_TruongHoc
             "
+            :dataBieuDoDashboard_LopHoc="
+                getDataBieuDoTruongHoc.dataBieuDoDashboard_LopHoc
+            "
             :is-loading="isLoading"
         />
     </div>
@@ -208,7 +211,8 @@ export default {
             getDataBieuDoTruongHoc: {
                 dataBieuDoTongQuan_TruongHoc: [],
                 dataBieuDoChatLuongDaoTao_TruongHoc: [],
-                dataBieuDoLoaiHinhDaoTao_TruongHoc: []
+                dataBieuDoLoaiHinhDaoTao_TruongHoc: [],
+                dataBieuDoDashboard_LopHoc: []
             }
         }
     },
@@ -269,7 +273,31 @@ export default {
                 'bieudoCot'
             )
         },
-
+        async getDataBieuDoDashboardLopHoc() {
+            const maDonVis_Update = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueUnitEducation,
+                'selectedValueUnitEducation'
+            )
+            const capHocs_Update = this.customValueSelectedThongKeTangGiam(
+                this.selectedValue.selectedValueGradeLevel,
+                'selectedValueGradeLevel'
+            )
+            const request_Data = {
+                capHoc: capHocs_Update,
+                maDonVi: maDonVis_Update
+            }
+            this.requestHeaders = {
+                token: this.authToken
+            }
+            const response = await sendRequest(
+                Api.bieuDoTruongHoc.bieuDoDashboardLopHoc,
+                request_Data,
+                this.requestHeaders,
+                null
+            )
+            this.getDataBieuDoTruongHoc.dataBieuDoDashboard_LopHoc =
+                response.item.toanTruong
+        },
         handleESelectChange(source, ...selectedOptions) {
             switch (source) {
                 case 'ESelectUnitEducation':
@@ -345,6 +373,7 @@ export default {
                 this.getDataBieuDoTongQuan_TrongHoc()
                 this.getDataBieuDoChatLuongDaoTao_TruongHoc()
                 this.getDataBieuDoLoaiHinhDaoTao_TruongHoc()
+                this.getDataBieuDoDashboardLopHoc()
 
                 loading.close()
             } catch (error) {

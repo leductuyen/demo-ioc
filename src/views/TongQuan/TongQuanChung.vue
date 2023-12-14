@@ -475,7 +475,8 @@ export default {
                 dataBieuDoChatLuongToiThieu: [],
                 dataBieuDoChuanMuc1: [],
                 dataBieuDoChuanMuc2: [],
-                dataBieuDoTongQuan_TruongHoc: [0, 0, 0, 0, 0, 0, 0, 0]
+                dataBieuDoTongQuan_TruongHoc: [0, 0, 0, 0, 0, 0, 0, 0],
+                dataBieuDoTruongHoc_LopHoc: []
             },
             getDataBieuDoTron: {
                 dataBieuDoTron_CanBoGiaoVien: [],
@@ -1003,6 +1004,7 @@ export default {
                 }
                 this.requesData_BieuDoPhanLoaiCanBo =
                     requesData_BieuDoPhanLoaiCanBo_Update
+
                 this.getDataThongKeTangGiam_TongSoTruongHoc()
                 this.getDataThongKeTangGiam_TongSoGiaoVien()
                 this.getDataThongKeTangGiam_TongSoHocSinh()
@@ -1016,6 +1018,8 @@ export default {
                 this.getDataBieuDoPhoDiemHocKyI_PhoDiem()
                 this.getDataBieuDoPhoDiemHocKyII_PhoDiem()
                 this.getDataBieuDoTongQuan_TrongHoc()
+
+                this.getDataBieuDoTron_YTeHocSinh()
 
                 loading.close()
             } catch (error) {

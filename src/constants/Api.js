@@ -51,6 +51,10 @@ const Api = {
         bietDoLoaiHinhDaoTao: {
             method: METHOD.POST,
             url: 'csdlgd-report-api/dasboard/truonghocloaihinhdaotao'
+        },
+        bieuDoDashboardLopHoc: {
+            method: METHOD.POST,
+            url: 'csdlgd-report-api/dasboard/lophoc'
         }
     },
     bieuDoHocSinh: {

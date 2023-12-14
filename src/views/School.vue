@@ -67,6 +67,29 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title">
+                                THỐNG KÊ TRƯỜNG HỌC - SỐ LƯỢNG LỚP HỌC
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- <PieChart
+                                :label="labelSoLuongTruong"
+                                :data_PieChart="dataBieuDoDashboard_LopHoc"
+                            /> -->
+                            <StackedColumnChart
+                                :data_StackedColumnChart="
+                                    customSort(dataBieuDoDashboard_LopHoc)
+                                "
+                                :xaxis_categories="
+                                    xaxisCategories.dashboardLopHoc
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -104,7 +127,8 @@ export default {
                     'Chuẩn mức 1',
                     'Chuẩn mức 2'
                 ],
-                loaiHinhDaoTao: ['Công lập', 'Tư thục', 'Dân lập']
+                loaiHinhDaoTao: ['Công lập', 'Tư thục', 'Dân lập'],
+                dashboardLopHoc: []
             }
         }
     },
@@ -147,6 +171,18 @@ export default {
         dataBieuDoLoaiHinhDaoTao_TruongHoc: {
             type: Array,
             required: true
+        },
+        dataBieuDoDashboard_LopHoc: {
+            type: Array,
+            required: true
+        }
+    },
+    watch: {
+        dataBieuDoLoaiHinhDaoTao_TruongHoc(newValue) {
+            console.log('bbbbbbbbb', newValue)
+        },
+        dataBieuDoDashboard_LopHoc(newValue) {
+            console.log('asasa', newValue)
         }
     }
 }

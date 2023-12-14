@@ -127,7 +127,6 @@ export default {
             this.chart.render()
         },
         updateChart(newData) {
-            console.log(newData)
             if (this.chart) {
                 this.chart.updateSeries(
                     newData.map((item, index) => ({
