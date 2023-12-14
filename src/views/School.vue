@@ -81,12 +81,18 @@
                             /> -->
                             <StackedColumnChart
                                 :data_StackedColumnChart="
-                                    customSort(dataBieuDoDashboard_LopHoc)
+                                    dataBieuDoDashboard_LopHoc
                                 "
                                 :xaxis_categories="
                                     xaxisCategories.dashboardLopHoc
                                 "
                             />
+                            <!-- <StackedColumnChart
+                                :data_StackedColumnChart="
+                                    customSort(dataBieuDoLoaiHinhDaoTao_TruongHoc)
+                                "
+                                :xaxis_categories="xaxisCategories.loaiHinhDaoTao"
+                            /> -->
                         </div>
                     </div>
                 </div>
