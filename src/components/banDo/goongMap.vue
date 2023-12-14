@@ -100,7 +100,7 @@ export default {
               'type': 'Feature',
               'properties': {
                 'description':
-                    '<p>Trường: '+truongHocs[i].tenTruongHoc+'</p>',
+                    '<p>Trường: ' + truongHocs[i].tenTruongHoc + '</p>',
                 'icon': 'school',
                 'capHoc': truongHocs[i].capHoc
               },
@@ -113,8 +113,7 @@ export default {
                 {
                   'type': 'Feature',
                   'properties': {
-                    'description':
-                        '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
+                    'description': truongHocs[i].tenTruongHoc,
                     'icon': this.getIconSchool(truongHocs[i].capHoc),
                     'iconSize': [30, 30],
                     'capHoc': truongHocs[i].capHoc
@@ -124,7 +123,7 @@ export default {
                     'coordinates': [lat, lag]
                   }
                 }
-            dataTruongHocs.push(obj)
+            dataTruongHocs.push(objSchool)
           }
         }
         this.dataMap.truong_hoc = dataTruongHocs
@@ -205,55 +204,31 @@ export default {
           },
           'filter': ['==', '$type', 'Polygon']
         });
-        // that.dataMap.truong_hoc.forEach(function (marker) {
-        //   var el = document.createElement('div');
-        //   el.className = 'marker';
-        //   el.style.backgroundImage = 'url('+that.getIconSchool(marker.properties.capHoc)+')';
-        //   el.style.width = '35px';
-        //   el.style.height ='35px';
-        //   el.style.backgroundSize = 'contain';
-        //   el.style.backgroundRepeat = 'no-repeat';
-        //   el.addEventListener('click', function () {
-        // console.log('click marker')
-        //   });
-        //   new goongjs.Marker(el)
-        //       .setLngLat(marker.geometry.coordinates)
-        //       .addTo(map);
-        // });
-        map.addSource('places', {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': that.dataMap.truong_hoc
-          }
+        var popup = new goongjs.Popup({
+          closeButton: true,
+          closeOnClick: false
         });
-        map.addLayer({
-          'id': 'places',
-          'type': 'symbol',
-          'source': 'places',
-          'layout': {
-            'icon-image': '{icon}-15',
-            'icon-allow-overlap': true
-          }
-        });
-        map.on('click', 'places', function (e) {
-          var coordinates = e.features[0].geometry.coordinates.slice();
-          var description = e.features[0].properties.description;
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-          }
-          new goongjs.Popup()
-              .setLngLat(coordinates)
-              .setHTML(description)
+        that.dataMap.truong_hoc.forEach(function (marker) {
+          var el = document.createElement('div');
+          el.className = 'marker';
+          el.style.backgroundImage = 'url(' + that.getIconSchool(marker.properties.capHoc) + ')';
+          el.style.width = '35px';
+          el.style.height = '35px';
+          el.style.backgroundSize = 'contain';
+          el.style.backgroundRepeat = 'no-repeat';
+          el.addEventListener('mouseenter', function (e) {
+            var coordinates = marker.geometry.coordinates.slice();
+            var description = marker.properties.description;
+            popup.setLngLat(coordinates).setHTML(description).addTo(map);
+          });
+          el.addEventListener('mouseleave', function (e) {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+          });
+          new goongjs.Marker(el)
+              .setLngLat(marker.geometry.coordinates)
               .addTo(map);
         });
-        map.on('mouseenter', 'places', function () {
-          map.getCanvas().style.cursor = 'pointer';
-        });
-        map.on('mouseleave', 'places', function () {
-          map.getCanvas().style.cursor = '';
-        });
-
       });
     },
     flyTo() {
