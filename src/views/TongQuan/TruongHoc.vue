@@ -282,10 +282,13 @@ export default {
                 this.selectedValue.selectedValueGradeLevel,
                 'selectedValueGradeLevel'
             )
+            const currentYear = new Date().getFullYear() - 1
             const request_Data = {
                 capHoc: capHocs_Update,
-                maDonVi: maDonVis_Update
+                maDonVi: maDonVis_Update,
+                namHoc: this.selectedValue.selectedValueSchoolYear || currentYear
             }
+
             this.requestHeaders = {
                 token: this.authToken
             }

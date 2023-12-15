@@ -14,7 +14,7 @@
 
         <div class="layout-card">
             <div class="row">
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-6">
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-6">
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-6 mb-6 mt-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
+                <div class="col-sm-12 mt-4">
                     <div class="card">
                         <div class="card-header">
                             <div class="title">
@@ -75,24 +75,10 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- <PieChart
-                                :label="labelSoLuongTruong"
-                                :data_PieChart="dataBieuDoDashboard_LopHoc"
-                            /> -->
-                            <StackedColumnChart
-                                :data_StackedColumnChart="
-                                    dataBieuDoDashboard_LopHoc
-                                "
-                                :xaxis_categories="
-                                    xaxisCategories.dashboardLopHoc
-                                "
+                            <ChartBar
+                                :chart-data="data"
+                                :chart-categories="categories"
                             />
-                            <!-- <StackedColumnChart
-                                :data_StackedColumnChart="
-                                    customSort(dataBieuDoLoaiHinhDaoTao_TruongHoc)
-                                "
-                                :xaxis_categories="xaxisCategories.loaiHinhDaoTao"
-                            /> -->
                         </div>
                     </div>
                 </div>
@@ -106,17 +92,55 @@ import PieChart from '@/components/PieChart.vue'
 import StackedColumnChart from '@/components/StackedColumnChart.vue'
 import { Icon } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-
+import ChartBar from '@/components/ChartBar.vue'
+import Vue from 'vue'
 export default {
     name: 'schoolC',
     components: {
         'el-icon': Icon,
         CustomButton,
         PieChart,
-        StackedColumnChart
+        StackedColumnChart,
+        ChartBar
+    },
+    watch: {
+        dataBieuDoDashboard_LopHoc(newValue) {
+            const convertedData = newValue.reduce(
+                (result, item) => {
+                    result.categories.push(...item.label)
+                    result.data.push(...item.data)
+                    return result
+                },
+                { categories: [], data: [] }
+            )
+            // console.log(convertedData.categories)
+            Vue.set(this, 'data', convertedData.data)
+            // Vue.set(this, 'categories', convertedData.categories)
+        }
     },
     data() {
         return {
+            categories: [
+                '0-12 tháng',
+                '12-24 tháng',
+                '24-36 tháng',
+                '3-4 tuổi',
+                '4-5 tuổi',
+                '5-6 tuổi',
+                'Lớp 1',
+                'Lớp 2',
+                'Lớp 3',
+                'Lớp 4',
+                'Lớp 5',
+                'Lớp 6',
+                'Lớp 7',
+                'Lớp 8',
+                'Lớp 9',
+                'Lớp 10',
+                'Lớp 11',
+                'Lớp 12'
+            ],
+            data: [],
             labelSoLuongTruong: [
                 'Mầm non',
                 'Tiểu học',
@@ -138,6 +162,7 @@ export default {
             }
         }
     },
+
     mounted() {
         this.customSort()
     },
@@ -181,14 +206,6 @@ export default {
         dataBieuDoDashboard_LopHoc: {
             type: Array,
             required: true
-        }
-    },
-    watch: {
-        dataBieuDoLoaiHinhDaoTao_TruongHoc(newValue) {
-            console.log('bbbbbbbbb', newValue)
-        },
-        dataBieuDoDashboard_LopHoc(newValue) {
-            console.log('asasa', newValue)
         }
     }
 }
