@@ -27,7 +27,7 @@ export default {
       map: null,
       i: null,
       markers: [],
-      centerLocation: [103.97673640728587, 22.38922740116539],
+      centerLocation: [105.83328783394829, 21.03917863749423],
       dataMap: {
         quan_huyen: [],
         truong_hoc: []
@@ -46,6 +46,11 @@ export default {
       if (val) {
         console.log("Dữ liệu bản đồ thay đổi")
         console.log('Khởi tạo bản đồ:')
+        if(this.item.quanHuyens&&this.item.quanHuyens.length&&this.item.quanHuyens[0].centralPoint){
+          this.centerLocation = [this.item.quanHuyens[0].centralPoint[1],this.item.quanHuyens[0].centralPoint[0]]
+        }
+        console.log('Trung tâm:')
+        console.log( this.centerLocation)
         this.setDataFromProps()
       } else {
         console.log('Xóa bản đồ')
@@ -170,8 +175,8 @@ export default {
       this.map = new goongjs.Map({
         container: 'map',
         style: 'https://tiles.goong.io/assets/goong_light_v2.json',
-        center: [103.97673640728587, 22.38922740116539],
-        zoom: 8,
+        center: this.centerLocation,
+        zoom: 9,
       });
       this.setGeoJSON();
     },
